@@ -1,0 +1,39 @@
+@import './fonts.css';
+body {
+    font-family: 'Dosis', sans-serif;
+    /* font-family: Molengo; */
+    /* font-family: Abel; */
+}
+
+ul a {
+    margin-bottom: 5px;
+}
+    
+.polaroid {
+    padding: 0.01em 16px;
+    margin: 0px 0;
+    box-shadow: 9px 5px 10px 0px rgba(26, 26, 26, 0.2), 0px 0px 20px 10px rgba(26, 26, 26, 0.2);
+    text-align: left;
+    /* border-radius: 10px; */
+    background-color: transparent;
+}
+
+.container {
+    padding-right: 0;
+    padding-left: 0;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.container-fluid-bd {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: 15px;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #007bff;
+}
