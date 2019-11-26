@@ -59,7 +59,7 @@ if (isset($_POST['Posts'])) {
                                 {
                                     //$value = $_POST['delete'];
                                     DeleteContentbyID($_POST['delete']);
-                                    exit(header("Location: index.php"));
+                                   // exit(header("Location: index.php"));
                                     //header('Location: index.php');
                                 }   
                             ?>
