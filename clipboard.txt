@@ -1,4 +1,5 @@
-﻿<a class="navbar-brand" href="index.php">BTCN07</a>
+
+<a class="navbar-brand" href="index.php">BTCN07</a>
 
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
@@ -46,5 +47,4 @@
         </li> -->
         <?php endif; ?>
     </ul>
-;;;
     
