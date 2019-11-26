@@ -65,6 +65,7 @@ if(isset($_POST['Posts']))
 
         <div class="row-">
             <?php foreach ($posts as $post): ?>
+            <form method="POST">
             <div class="col-sm-12" style="margin-bottom: 10px;">
                 <div class="card">
                     <div class="card-body">
@@ -81,9 +82,19 @@ if(isset($_POST['Posts']))
                         <p class="card-text">
                             <?php echo $post['content']; ?>
                         </p>
+                        <button type="submit" name="delete" value="<?php echo $post['postID']; ?>" class="btn btn-danger">Xóa</button>
+                            <?php 
+                                if (isset($_POST['delete']))
+                                {
+                                    //$value = $_POST['delete'];
+                                    DeleteContentbyID($_POST['delete']);
+                                    header('Location: infomation.php');
+                                }   
+                            ?>
                     </div>
                 </div>
             </div>
+            </form>
             <?php endforeach; ?>
         </div>
     </div>
