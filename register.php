@@ -49,9 +49,15 @@ if (empty(trim($username)) || empty(trim($f_name)) || empty(trim($l_name)) || em
             $check     = false;
             }
    } else {
+       if(strlen(trim($phonenumber)) > 10){
+        $noti_fail = 'Số điện thoại không hợp lệ!';
+        $check     = false;
+       }
+       else{
     $newUserID = createUser($f_name, $l_name, $email, $username, $password,'',$birthday,$phonenumber);
     $noti_succ = 'Đăng kí thành công. Kiểm tra email để kích hoạt tài khoản! <a href="index.php">Trở về trang chủ?</a>';
     $check     = true;
+       }
    }
   }
  }
