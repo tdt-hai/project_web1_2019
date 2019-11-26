@@ -25,7 +25,6 @@ if(isset($_POST['Posts']))
 ?>
 <link rel="stylesheet" type="text/css" href="./css_files/ust.css">
 <?php include 'header.php'; ?>
-
 <!-- ---------------------------------- -->
 <div class="coverpadx"><img src="<?php echo 'data:image/jpeg;base64,'.base64_encode( $posts2['profilePicture'] ); ?>" width="850px" height="310px"/>
 </div>
@@ -46,7 +45,6 @@ if(isset($_POST['Posts']))
 </div>
 <div class="box14">Photos
 </div>
-
 <select>
   <option selected>More</option>
   <option value="saab">Videos</option>
