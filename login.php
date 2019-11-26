@@ -10,20 +10,20 @@ if ($currentUser) {
   <h1>Đăng nhập</h1>
   <?php if (isset($_POST['username']) && isset($_POST['password'])): ?>
   <?php
-$email    = $username    = $_POST['username'];
-$password = $_POST['password'];
-$check    = false;
+    $email    = $username    = $_POST['username'];
+    $password = $_POST['password'];
+    $check    = false;
 
 $getUser = findUser($username);
 
-if ($getUser && $getUser['username'] != $username && $getUser['email'] != $email) {
+if ($getUser['username'] != $username && $getUser['email'] != $email) {
  $noti_err = 'Tài khoản không tồn tại! <a href="register.php">Đăng ký tài khoản ngay tại đây.</a>';
-} else {
+} else {  
  if (!password_verify($password, $getUser['password'])) {
   $noti_err = 'Mật khẩu không chính xác!';
  } else {
   if ($getUser['confirmStatus'] != 1) {
-   $noti_err = 'Tài khoản chưa được kích hoạt! <a href="register.php">Vui lòng kích hoạt tài khoản tại đây!</a>';
+   $noti_err = 'Tài khoản chưa được kích hoạt! Vui lòng kiểm tra lại email để kích hoạt tài khoản!</a>';
   } else {
    $check              = true;
    $noti_succ          = 'Đăng nhập thành công! <a href="index.php">Trở về trang chủ.</a>';
