@@ -1,0 +1,125 @@
+*{
+    margin:0px;
+    box-sizing:border-box;
+    transition: 0.2s all ease-in-out;
+    -webkit-transition: 0.2s all ease-in-out;
+    -o-transition: 0.2s all ease-in-out;
+    -moz-transition: 0.2s all ease-in-out;
+}
+/*Columns*/
+*[class*=col-]{float:left;padding:0px 15px;width:100%;min-height:1px;}
+@media (min-width: 768px) {
+  .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
+    float: left;
+  }
+  
+Header
+.header {
+    width: 100%;
+    background: #0ddb30;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index:999;
+    box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.45);
+}
+.header .logo h1{
+    line-height:48px;
+}
+.header .logo a{
+    color:#fff;
+}
+.header *[class*=col-]{
+    padding:5px 10px;
+    color:#fff;
+}
+.header .inline-form{
+    padding:5px 10px;
+}
+/* Main */
+.main{
+    min-height:100%;
+    padding: 30px 0px;
+    background: url(../css_files/imgs/wall.jpg) fixed center;
+}
+/* Backgrounds */
+.gradient{
+    background: linear-gradient(white, #D3D8E8);
+}
+
+/*Buttons*/
+.btn {
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    border: 1px solid rgba(0,0,0,0.2);
+    box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    outline: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    /* line-height: 28px; */
+    border-radius: 2px;
+    font-weight: bold;
+    text-align: center;
+}
+.btn:active{
+    box-shadow:none;
+}
+.btn-primary {
+    background: #278537;
+}
+.btn-primary:hover {
+    background: #1f6b2c;
+}
+.btn-success {
+    background: #4CAF50;
+}
+.btn-success:hover{
+    background: #3d8c40;
+}
+/*Text*/
+.text-primary{
+    color: #0e385f;
+}
+.text-center{
+    text-align:center;
+}
+.text-mute{color:#777;}
+/* Form */
+form{
+    padding:10px 0px;
+}
+input,select,textarea,button{
+    padding:5px 10px;
+    border:1px solid rgba(0,0,0,0.2);
+    border-radius:2px;
+    outline: none;
+}
+input:focus,select:focus,textarea:focus,button:focus{
+    border:1px solid rgba(0,0,0,0.5);
+    outline:none;
+}
+.input-lg{
+    font-size:20px;
+    padding:10px 20px;
+}
+.inline-form input{
+    display:inline-block;
+}
+.form-group{
+    display:inline-block;
+    width:100%;
+    margin-bottom:10px;
+}
+/*Footer*/
+.footer {
+    padding: 20px 15px;
+    box-shadow: 0px -6px 5px 0px rgba(0,0,0,0.5);
+    background: rgba(251, 249, 249, 0.45);
+}
+/* Responsive */
+@media (max-width:768px){
+    body{padding-top:0px}
+    .header{position:relative;}
+    .header .logo{text-align:center}
+}
