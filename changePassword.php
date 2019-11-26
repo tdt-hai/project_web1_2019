@@ -11,6 +11,7 @@ if (!$currentUser) {
 <h1>Đổi mật khẩu</h1>
 <?php if ("POST" == $_SERVER["REQUEST_METHOD"]): ?>
 <?php
+
 $currentPass = $_POST['currentPass'];
 $newPass     = $_POST['newPass'];
 $repass      = $_POST['re-password'];
@@ -24,7 +25,7 @@ if (!empty(trim($currentPass)) && !empty(trim($newPass)) && !empty(trim($repass)
    if ($currentPass != $newPass) {
     if ($newPass == $repass) {
      // Updating
-     updateUserPassword($_SESSION['userEmail'], $newPass);
+     updateUserPassword($currentUser['email'], $newPass);
      $noti_succ = 'Thay đổi mật khẩu thành công! <a href="index.php">Trở về trang chủ.</a>';
      $check     = true;
     } else {

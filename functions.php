@@ -76,12 +76,12 @@ function updateUserPassword($email, $newPass)
 }
 
 /// Update Profile
-function updateUserProfile($id, $f_name, $l_name)
+function updateUserProfile($id, $f_name, $l_name, $phonenumber, $birthday)
 {
         global $db;
-        $command = "UPDATE `user_accounts` SET `firstname`= ?, `lastname` = ? WHERE `id` = ?";
+        $command = "UPDATE `user_accounts` SET `firstname`= ?, `lastname` = ?, `phoneNumber` = ?, `Birthday` = ? WHERE `id` = ?";
         $stmt    = $db->prepare($command);
-        return $stmt->execute(array($f_name, $l_name, $id));
+        return $stmt->execute(array($f_name, $l_name, $phonenumber, $birthday, $id));
 }
 /// Update Profile Picture
 function updateUserProfilePicture($id, $image)

@@ -43,7 +43,7 @@ if (isset($_POST['Posts'])) {
                 <div class="card" style="margin-bottom: 10px;">
                     <div class="card-body">
                         <h5 class="card-title">
-                            <img style="width: 80px;" src="<?php echo 'data:image/jpeg;base64,' . base64_encode($post['profilePicture']); ?>" class="card-img-top" alt="<?php echo $post['firstname'] . ' ' . $post['lastname']; ?>">
+                           <img style="width: 80px;" src="<?php echo 'data:image/jpeg;base64,' . base64_encode($post['profilePicture']); ?>" class="card-img-top" alt="<?php echo $post['firstname'] . ' ' . $post['lastname']; ?>">
                             <?php echo $post['firstname'] . ' ' . $post['lastname']; ?>
                         </h5>
                         <p class="card-text">
