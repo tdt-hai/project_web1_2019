@@ -6,8 +6,8 @@ if ($currentUser) {
 }
 ?>
 <?php include 'header.php'; ?>
+<link rel="stylesheet" href="./css_files/css/style.css"/>
 
-  <h1>Đăng nhập</h1>
   <?php if (isset($_POST['username']) && isset($_POST['password'])): ?>
   <?php
     $email    = $username    = $_POST['username'];
@@ -32,7 +32,6 @@ if ($getUser['username'] != $username && $getUser['email'] != $email) {
  }
 }
 ?>
-
   <?php if ($check): ?>
     <div class="alert alert-success" role="alert">
     <?php echo $noti_succ; ?>
@@ -44,22 +43,40 @@ if ($getUser['username'] != $username && $getUser['email'] != $email) {
   <?php endif; ?>
 
   <?php else: ?>
-  <div>
-    <form action="login.php" method="POST">
-      <div class="form-group">
-        <label for="username">Tên đăng nhập/Email</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Nhập username hoặc email">
-      </div>
-      <div class="form-group">
-        <label for="password">Mật khẩu</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Mật khẩu">
-      </div>
-      <a href="findAccount.php">Quên mật khẩu?</a>
-      <p>Chưa có tài khoản?<a href="register.php"> Đăng ký</a> </p>
-      <button type="submit" class="btn btn-primary">Đăng nhập</button>
-    </form>
-  </div>
+  <div class="main">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="pull-left text-center col-sm-7">
+                    <div >
+                            <h3 class="text-primary">Lotus helps you connect and share with the people in your life.</h3>
+                            <img src="./css_files/imgs/x.png" class="img-responsive"/>                            
+                        </div>
+                    </div>
+                    <div class="pull-right col-sm-5">
+                        <div class="signup-form">
+                            <h1>Đăng nhập</h1>
+                            <form action="login.php" method="POST">
+                                <div class="form-group">
+                                    <input class="input-lg col-sm-12" type="text"  id="username"  name="username"
+                                           placeholder="Nhập username hoặc email">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" placeholder="Mật khẩu"name="password" class="input-lg col-sm-12"/>
+                                </div>
+                                <div class="form-group">
+                                    <small class="text-mute">By clicking Create Account, you agree to our Terms and confirm that you have read our Data Policy, including our Cookie Use Policy. You may receive SMS message notifications from Facebook and can opt out at any time.</small>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Login" class="btn btn-success input-lg"/>
+                                    <p><br>Bạn chưa có tài khoản? <a href="register.php">Đăng kí</a></p>
+                                    <a href="findAccount.php">Quên mật khẩu?</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
   <?php endif; ?>
-
 <?php include 'footer.php'; ?>
