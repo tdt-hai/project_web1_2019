@@ -20,4 +20,4 @@ $EMAIL_PASSWORD = 'Tdth13158';
 
 
 // Url config
-$BASE_URL = 'http://localhost:8080/btn';
+$BASE_URL = 'http://localhost:8080/Project';
