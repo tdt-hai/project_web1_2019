@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="vi">
 
     <head>
         <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet"
@@ -12,7 +12,6 @@
               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
               crossorigin="anonymous">
         <style type="text/css">
-        /* @import './css_files/main.css'; */
         </style>
         <link rel="stylesheet" type="text/css" href="./css_files/main.css">
         <title>BTN</title>

@@ -58,6 +58,7 @@ function createUser($f_name, $l_name, $email, $username, $passsword,$profilePict
         $stmt->execute(array($f_name, $l_name, $email, $username, $hashPass, 0, $activationCode,$profilePicture,$birthday,$phonenumber));
         $newAccount = $db->lastInsertId();
         // Send mail
+        die();
         sendMail($email, $l_name, 'Confirm email',
         "Your activation code is:
         <a href=\"$BASE_URL/confirmEmail.php?activationCode=$activationCode\">$BASE_URL/confirmEmail.php?activationCode=$activationCode</a>");
@@ -142,7 +143,7 @@ function createPost($userID, $content)
 function showPost($id)
 {
         global $db;
-        $stmt = $db->prepare("SELECT uc.profilePicture,uc.firstname,uc.lastname,us.post_time,us.content FROM `user_posts` us, user_accounts uc Where us.id= ? and us.id=uc.id");
+        $stmt = $db->prepare("SELECT us.postID, uc.profilePicture,uc.firstname,uc.lastname,us.post_time,us.content FROM `user_posts` us, user_accounts uc Where us.id= ? and us.id=uc.id");
         $stmt->execute(array($id));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -219,4 +220,11 @@ function addRecoverCode($activationCode, $email, $username, $l_name)
  sendMail($email, $l_name, 'Recover your account',
   "Click the link to change password:
   <a href=\"$BASE_URL/confirmEmail.php?activationCode=$activationCode\">$BASE_URL/confirmEmail.php?activationCode=$activationCode</a>");
+}
+
+function DeleteContentbyID($id){
+        global $db ;
+        $stmt = $db->prepare("DELETE FROM `user_posts` WHERE `postID` = ? " );
+        $stmt->execute(array($id));
+        //return $stmt->fetch(PDO::FETCH_ASSOC);
 }
