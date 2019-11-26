@@ -31,6 +31,17 @@ if(isset($_POST['Posts']))
                     <li> <strong>Số điện thoại : </strong><?php echo $currentUser['phoneNumber'] ; ?></li>
                     <li> <strong> Email: </strong><a href="mailto:<?php echo $currentUser['email'] ;?>" target="_blank"><?php echo $currentUser['email'] ; ?></a></li>
                     <img style="width: 250px;" src="<?php echo 'data:image/jpeg;base64,'.base64_encode( $posts2['profilePicture'] ); ?>">
+
+<!-- ---------------------------------- -->
+<div class="coverpadx"><img src="<?php echo 'data:image/jpeg;base64,'.base64_encode( $posts2['profilePicture'] ); ?>" width="850px" height="265px"/>
+</div>
+
+
+
+<div class="profilepic">
+</div>
+<div class="profilepicx"><img src="<?php echo 'data:image/jpeg;base64,'.base64_encode( $posts2['profilePicture'] ); ?>" alt="A girl" height="140px"> 
+
 </div>
     <div class="col-md-6 offset-md-3">
         <div class="row-">

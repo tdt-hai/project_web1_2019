@@ -25,28 +25,29 @@ if (!empty(trim($currentPass)) && !empty(trim($newPass)) && !empty(trim($repass)
    if ($currentPass != $newPass) {
     if ($newPass == $repass) {
      // Updating
-     updateUserPassword($currentUser['email'], $newPass);
-     $noti_succ = 'Thay đổi mật khẩu thành công! <a href="index.php">Trở về trang chủ.</a>';
-     $check     = true;
+     
+            updateUserPassword($currentUser['email'], $newPass);
+            $noti_succ = 'Thay đổi mật khẩu thành công! <a href="index.php">Trở về trang chủ.</a>';
+            $check     = true;
     } else {
-     $noti_err_pass = 'Mật khẩu xác nhận không chính xác! <a href="changePassword.php">Trở về.</a>';
-     $check         = false;
+            $noti_err_pass = 'Mật khẩu xác nhận không chính xác! <a href="changePassword.php">Trở về.</a>';
+            $check         = false;
     }
    } else {
-    $noti_err_pass = 'Mật khẩu mới phải khác mật khẩu cũ! <a href="changePassword.php">Trở về.</a>';
-    $check         = false;
+            $noti_err_pass = 'Mật khẩu mới phải khác mật khẩu cũ! <a href="changePassword.php">Trở về.</a>';
+            $check         = false;
    }
   } else {
-   $noti_err_pass = 'Vui lòng nhập mật khẩu từ 6 đến 15 ký tự! <a href="changePassword.php">Trở về.</a>';
-   $check         = false;
+            $noti_err_pass = 'Vui lòng nhập mật khẩu từ 6 đến 15 ký tự! <a href="changePassword.php">Trở về.</a>';
+            $check         = false;
   }
  } else {
-  $noti_err_pass = 'Mật khẩu hiện tại không đúng! <a href="changePassword.php">Trở về.</a>';
-  $check         = false;
+            $noti_err_pass = 'Mật khẩu hiện tại không đúng! <a href="changePassword.php">Trở về.</a>';
+            $check         = false;
  }
 } else {
- $noti_err_pass = 'Vui lòng nhập đầy đủ thông tin! <a href="changePassword.php">Trở về.</a>';
- $check         = false;
+            $noti_err_pass = 'Vui lòng nhập đầy đủ thông tin! <a href="changePassword.php">Trở về.</a>';
+            $check         = false;
 }
 ?>
 
