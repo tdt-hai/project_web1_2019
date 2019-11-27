@@ -1,6 +1,6 @@
 <?php
 require_once 'init.php';
-
+ob_start();
 $posts = showPost($currentUser['id']);
 //$posts2 = showPost2($currentUser['id']);
 ?>
@@ -65,22 +65,33 @@ if (isset($_POST['Posts'])) {
                 <!-- post -->
                 <!-- ./post -->
                 <?php foreach ($posts as $post) : ?>
-                    <div class="panel panel-default">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    <img style="width: 80px;" src="<?php echo 'data:image/jpeg;base64,' . base64_encode($post['profilePicture']); ?>" class="card-img-top" alt="<?php echo $post['firstname'] . ' ' . $post['lastname']; ?>">
-                                    <?php echo $post['firstname'] . ' ' . $post['lastname']; ?>
-                                    <h6 class="card-subtitle mb-2 text-muted">
-                                        Đăng lúc: <?php echo $post['post_time']; ?>
-                                    </h6>
-                                </h5>
-                                <p class="card-text">
-                                    <?php echo $post['content']; ?>
-                                </p>
-                            </div>
+                    <form method = "POST">
+                        <div class="panel panel-default">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <img style="width: 80px;" src="<?php echo 'data:image/jpeg;base64,' . base64_encode($post['profilePicture']); ?>" class="card-img-top" alt="<?php echo $post['firstname'] . ' ' . $post['lastname']; ?>">
+                                        <?php echo $post['firstname'] . ' ' . $post['lastname']; ?>
+                                        <h6 class="card-subtitle mb-2 text-muted">
+                                            Đăng lúc: <?php echo $post['post_time']; ?>
+                                        </h6>
+                                    </h5>
+                                    <p class="card-text">
+                                        <?php echo $post['content']; ?>
+                                    </p>
+                                    <?php 
+                                    if (isset($_POST['delete']))
+                                    {
+                                        $value = $_POST['delete'];
+                                        DeleteContentbyID($value);
+                                        header('Location: information.php');
+                                    }   
+                                    ?>   
+                                        <button type="submit" name="delete" value="<?php echo $post['postID'] ?>" class="btn btn-danger">Xóa</button>
+                                </div>
+                                </div>  
                         </div>
-                    </div>
+                    </form>
                 <?php endforeach; ?>
             </div>
         </div>
@@ -101,5 +112,5 @@ if (isset($_POST['Posts'])) {
         </div>
         <div>
 </main>
-
+<?php ob_end_flush(); ?>
 <?php include 'footer.php'; ?>
