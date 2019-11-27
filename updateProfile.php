@@ -11,12 +11,15 @@ if (!$currentUser) {
 <h1>Đổi thông tin cá nhân</h1>
 <?php if ("POST" == $_SERVER["REQUEST_METHOD"]) : ?>
     <?php
+        
         $f_name = $_POST['f-name'];
         $l_name = $_POST['l-name'];
         $birthday = $_POST['b-date'];
         $phonenumber = $_POST['phoneNumber'];
         $check = false;
 
+        //var_dump ($_POST['f-name']);
+        
         // Check
         if(empty($f_name))
                 {
