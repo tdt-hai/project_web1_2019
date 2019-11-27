@@ -16,7 +16,6 @@ if (isset($_POST['Posts'])) {
         header("Location: information.php");
     }
 }
-
 ?>
 <?php include 'header.php'; ?>
 <main class="container">
@@ -57,7 +56,6 @@ if (isset($_POST['Posts'])) {
                 </div>
 
             </div>
-
             <hr>
 
             <!-- timeline -->
@@ -83,6 +81,40 @@ if (isset($_POST['Posts'])) {
                     </div>
                 <?php endforeach; ?>
             </div>
+        <?php endif; ?>
+        <div class="row-">
+            <?php foreach ($posts as $post) : ?>
+                <form method="POST">
+                    <div class="col-sm-12" style="margin-bottom: 10px;">
+                        <div class="card">
+                            
+                            
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <img style="width: 80px;" src="<?php echo 'data:image/jpeg;base64,' . base64_encode($post['profilePicture']); ?>" class="card-img-top" alt="<?php echo $post['firstname'] . ' ' . $post['lastname']; ?>">
+                                    <?php echo $post['firstname'] . ' ' . $post['lastname']; ?>
+                                    <h6 class="card-subtitle mb-2 text-muted">
+                                        Đăng lúc: <?php echo $post['post_time']; ?>
+                                    </h6>
+                                </h5>
+                                <p class="card-text">
+                                    <?php echo $post['content']; ?>
+                                </p>
+                                
+                                <?php
+                                    if (isset($_POST['delete'])) {
+                                        $val = $_POST['delete'];
+                                        DeleteContentbyID($val);
+                                        header('Location: information.php');
+                                    }
+                                    ?>
+                                <button type="submit" name="delete" value="<?php echo $post['postID'] ?>" class="btn btn-danger">Xóa</button>
+                                <?php ob_end_flush(); ?>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            <?php endforeach; ?>
         </div>
         <div class="col-md-3">
             <!-- friends -->
