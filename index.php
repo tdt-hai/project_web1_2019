@@ -17,6 +17,7 @@ if (isset($_POST['Posts'])) {
     }
 }
 ?>
+
 <div class="col-md-6 offset-md-3">
     <?php if ($currentUser) : ?>
         <h3>Chào mừng <?php echo $currentUser['firstname'] . ' ' . $currentUser['lastname']; ?> đã trở lại!
@@ -44,6 +45,7 @@ if (isset($_POST['Posts'])) {
                     <div class="card-body">
                     <?php ob_start(); ?>
                         <h5 class="card-title">
+
                            <img style="width:80px;" src="<?php echo 'data:image/jpeg;base64,'.base64_encode($post['profilePicture']);?>" class="card-img-top" alt="<?php echo $post['firstname'] . ' ' . $post['lastname']; ?>">
                             <?php echo $post['firstname'] . ' ' . $post['lastname']; ?>
                         </h5>
@@ -74,4 +76,4 @@ if (isset($_POST['Posts'])) {
     <?php else : ?>
         <h1>Chào mừng bạn đã đến với trang web.</h1>
     <?php endif; ?>
-<?php include 'footer.php'; ?>
+    <?php include 'footer.php'; ?>
