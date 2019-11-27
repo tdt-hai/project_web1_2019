@@ -42,8 +42,8 @@ if (!$currentUser) {
         if (isset($_FILES['profilePicture'])) {
             $fileName = $_FILES['profilePicture']['name'];
             $fileTmp  = $_FILES['profilePicture']['tmp_name'];
-            $fileArr = explode('.', $fileName);
-            $newImageName = 'avatar_' . $currentUser['username'] . '.jpg' /* . $fileArr[1]*//* $fileArr[1] is ending of fileName (.jpg/.jpeg ...) */;
+            // $fileArr = explode('.', $fileName);
+            //$newImageName = 'avatar_' . $currentUser['username'] . '.jpg' /* . $fileArr[1]*//* $fileArr[1] is ending of fileName (.jpg/.jpeg ...) */;
 
             if (isset($fileName) && !empty($fileName)) {
                 // lay duoi file

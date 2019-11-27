@@ -16,6 +16,7 @@ if (isset($_POST['Posts'])) {
     }
 }
 ?>
+
 <div class="col-md-6 offset-md-3">
     <?php if ($currentUser) : ?>
         <h3>Chào mừng <?php echo $currentUser['firstname'] . ' ' . $currentUser['lastname']; ?> đã trở lại!
@@ -43,7 +44,7 @@ if (isset($_POST['Posts'])) {
                 <div class="card" style="margin-bottom: 10px;">
                     <div class="card-body">
                         <h5 class="card-title">
-                           <img style="width: 80px;" src="<?php echo 'data:image/jpeg;base64,' . base64_encode($post['profilePicture']); ?>" class="card-img-top" alt="<?php echo $post['firstname'] . ' ' . $post['lastname']; ?>">
+                            <img style="width: 80px;" src="<?php echo 'data:image/jpeg;base64,' . base64_encode($post['profilePicture']); ?>" class="card-img-top" alt="<?php echo $post['firstname'] . ' ' . $post['lastname']; ?>">
                             <?php echo $post['firstname'] . ' ' . $post['lastname']; ?>
                         </h5>
                         <p class="card-text">
@@ -52,17 +53,17 @@ if (isset($_POST['Posts'])) {
                                 <h6><strong><?php echo $post['content'] ?></strong></h6>
                             </p>
                         </p>
-                        <?php if ($post['id'] == $currentUser['id']):?>
+                        <?php if ($post['id'] == $currentUser['id']) : ?>
                             <button type="submit" name="delete" value="<?php echo $post['postID'] ?>" class="btn btn-danger">Xóa</button>
-                            <?php 
-                                if (isset($_POST['delete']))
-                                {
-                                    //$value = $_POST['delete'];
-                                    DeleteContentbyID($_POST['delete']);
-                                   // exit(header("Location: index.php"));
-                                    //header('Location: index.php');
-                                }   
-                            ?>
+
+                            <?php
+                                        if (isset($_POST['delete'])) {
+                                            //$value = $_POST['delete'];
+                                            DeleteContentbyID($_POST['delete']);
+                                            //exit(header("Location: index.php"));
+                                            //header('Location: index.php');
+                                        }
+                                        ?>
                         <?php else : ?>
                         <?php endif; ?>
                     </div>
@@ -74,4 +75,4 @@ if (isset($_POST['Posts'])) {
     <?php else : ?>
         <h1>Chào mừng bạn đã đến với trang web.</h1>
     <?php endif; ?>
-<?php include 'footer.php'; ?>
+    <?php include 'footer.php'; ?>

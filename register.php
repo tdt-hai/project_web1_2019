@@ -2,143 +2,121 @@
 require_once 'init.php';
 
 if ($currentUser) {
- header('Location: index.php');
- exit();
+    header('Location: index.php');
+    exit();
 }
 ?>
 <?php include 'header.php'; ?>
+<link rel="stylesheet" href="./css_files/css/style.css" />
 
-<h1>Đăng ký</h1>
-<?php if ("POST" == $_SERVER["REQUEST_METHOD"]): ?>
-<?php
-$f_name   = $_POST['f-name'];
-$l_name   = $_POST['l-name'];
-$birthday = $_POST['b-date'];
-$phonenumber = $_POST['phoneNumber'];
-$email    = $_POST['email'];
-$username = $_POST['username'];
-$password = $_POST['password'];
-$repass   = $_POST['re-password'];
+<?php if ("POST" == $_SERVER["REQUEST_METHOD"]) : ?>
+    <?php
+        $f_name   = $_POST['f-name'];
+        $l_name   = $_POST['l-name'];
+        $birthday = $_POST['b-date'];
+        $phonenumber = $_POST['phoneNumber'];
+        $email    = $_POST['email'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
 
-$check    = false;
+        $check    = false;
 
-// Get username/email
-$getUserEmail    = findUser($email);
-$getUserUsername = findUser($username);
+        // Get username/email
+        $getUserEmail    = findUser($email);
+        $getUserUsername = findUser($username);
 
-if (empty(trim($username)) || empty(trim($f_name)) || empty(trim($l_name)) || empty(trim($email)) || empty(trim($password)) || empty(trim($repass)) || empty(trim($birthday)) || empty(trim($phonenumber))) {
-    $noti_fail = 'Vui lòng nhập đầy đủ thông tin';
-    $check     = false;
-} else {
-// Validate pass
- if (strlen(trim($password)) < 6 || strlen(trim($password)) > 15) {
-        $noti_fail = 'Vui lòng nhập mật khẩu từ 6 đến 15 ký tự';
-        $check     = false;
- } else {
-  // Validate rePass
-  if (empty($noti_err_pass) && ($password != $repass)) {
-        $noti_fail = 'Mật khẩu xác nhận không khớp!';
-        $check     = false;
-  } else {
-   if ($getUserEmail || $getUserUsername) {
-            if ($getUserEmail) {
-            $noti_fail = 'Email đã được đăng ký. <a href="login.php">Đăng nhập?</a>';
+        if (empty(trim($username)) || empty(trim($f_name)) || empty(trim($l_name)) || empty(trim($email)) || empty(trim($password)) || empty(trim($birthday)) || empty(trim($phonenumber))) {
+            $noti_fail = 'Vui lòng nhập đầy đủ thông tin';
             $check     = false;
-            } elseif ($getUserUsername) {
-            $noti_fail = 'Username đã tồn tại. <a href="login.php">Đăng nhập?</a>';
-            $check     = false;
+        } else {
+            // Validate pass
+            if (strlen(trim($password)) < 6 || strlen(trim($password)) > 15) {
+                $noti_fail = 'Vui lòng nhập mật khẩu từ 6 đến 15 ký tự';
+                $check     = false;
+            } else {
+                // Validate rePass
+                if ($getUserEmail || $getUserUsername) {
+                    if ($getUserEmail) {
+                        $noti_fail = 'Email đã được đăng ký. <a href="login.php">Đăng nhập?</a>';
+                        $check     = false;
+                    } elseif ($getUserUsername) {
+                        $noti_fail = 'Username đã tồn tại. <a href="login.php">Đăng nhập?</a>';
+                        $check     = false;
+                    }
+                } else {
+                    if (strlen(trim($phonenumber)) > 10) {
+                        $noti_fail = 'Số điện thoại không hợp lệ!';
+                        $check     = false;
+                    } else {
+                        $newUserID = createUser($f_name, $l_name, $email, $username, $password, '', $birthday, $phonenumber);
+                        $noti_succ = 'Đăng kí thành công. Kiểm tra email để kích hoạt tài khoản! <a href="index.php">Trở về trang chủ?</a>';
+                        $check     = true;
+                    }
+                }
             }
-   } else {
-       if(strlen(trim($phonenumber)) > 10){
-        $noti_fail = 'Số điện thoại không hợp lệ!';
-        $check     = false;
-       }
-       else{
-    $newUserID = createUser($f_name, $l_name, $email, $username, $password,'',$birthday,$phonenumber);
-    $noti_succ = 'Đăng kí thành công. Kiểm tra email để kích hoạt tài khoản! <a href="index.php">Trở về trang chủ?</a>';
-    $check     = true;
-       }
-   }
-  }
- }
-}
-?>
-
-<?php if ($check): ?>
-<div class="alert alert-success" role="alert">
-    <?php echo $noti_succ; ?>
-</div>
-<?php else: ?>
-<div class="alert alert-danger" role="alert">
-    <?php echo $noti_fail; ?>
-</div>
-<?php endif; ?>
-
-<?php else: ?>
-<div>
-    <form action="register.php" method="POST">
-
-        <div class="form-group">
+        }
+        ?> 
+        <?php if ($check) : ?>
+                            <div class="alert alert-success" role="alert">
+                                <?php echo $noti_succ; ?>
+                            </div>
+                        <?php else: ?>
+                            <div class="alert alert-danger" role="alert">
+                                <?php echo $noti_fail; ?>
+                            </div>
+        <?php endif; ?>
+        <?php else: ?> 
+    <div class="main">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col">
-                    <label for="f-name">Họ</label>
-                    <input type="text" class="form-control" id="f-name" name="f-name"
-                           placeholder="Họ">
+                <div class="pull-left text-center col-sm-7">
+                    <div>
+                        <h3 class="text-primary">Lotus helps you connect and share with the people in your life.</h3>
+                        <img src="./css_files/imgs/x.png" class="img-responsive" />
+                    </div>
                 </div>
-                <div class="col">
-                    <label for="l-name">Tên</label>
-                    <input type="text" class="form-control" id="l-name" name="l-name"
-                           placeholder="Tên">
-                </div>
-                <div class="col">
-                    <label for="b-date">Ngày sinh</label>
-                    <input type="date" class="form-control" id="b-date" name="b-date"
-                           placeholder="">
-                </div>
-                <div class="col">
-                    <label for="phoneNumber">Số điện thoại</label>
-                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
-                           placeholder="">
+                <div class="pull-right col-sm-5">
+                    <div class="signup-form">
+                        <h1>Đăng kí tài khoản mới</h1>
+                        <p class="h3">Hãy đăng kí vì nó miễn phí.</p>
+                        
+
+                        <form action="register.php" method="POST">
+                            <div class="form-group">
+                                <input type="text" placeholder="Họ" name="f-name" class="input-lg col-sm-6" />
+                                <input type="text" placeholder="Tên" name="l-name" class="input-lg col-sm-6" />
+                            </div>
+                            <div class="form-group">
+                                <input class="input-lg col-sm-12" type="text" id="username" name="username" placeholder="Tên đăng nhập">
+                            </div>
+                            <div class="form-group">
+                                <input type="email" placeholder="Email" name="email" class="input-lg col-sm-12" />
+                            </div>
+                            <div class="form-group">
+                                <input type="password" placeholder="Mật khẩu" name="password" class="input-lg col-sm-12" />
+                            </div>
+                            <div class="form-group">
+                                <input class="input-lg col-sm-12" type="date" id="b-date" name="b-date" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <input class="input-lg col-sm-12" type="text" id="phoneNumber" name="phoneNumber" placeholder="Số điện thoại">
+                            </div>
+
+                            <div class="form-group">
+                                <small class="text-mute">By clicking Create Account, you agree to our Terms and confirm that you have read our Data Policy, including our Cookie Use Policy. You may receive SMS message notifications from Facebook and can opt out at any time.</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <input type="submit" value="Đăng kí" class="btn btn-success input-lg" />
+                                <p><br>Bạn đã có tài khoản? <a href="login.php">Đăng nhập</a></p>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email"
-                   placeholder="name@example.com">
-        </div>
-
-        <div class="form-group">
-            <label for="username">Tên đăng nhập</label>
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">@</span>
-                </div>
-                <input type="text" class="form-control" placeholder="Username" id="username"
-                       name="username" aria-label="Username" aria-describedby="basic-addon1">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="password">Mật khẩu</label>
-            <input type="password" class="form-control" id="password" name="password"
-                   placeholder="Mật khẩu">
-        </div>
-
-        <div class="form-group">
-            <label for="re-password">Nhập lại mật khẩu</label>
-            <input type="password" class="form-control" id="re-password" name="re-password"
-                   placeholder="Xác nhận lại mật khẩu">
-        </div>
-
-        <div>
-            <button type="submit" class="btn btn-primary">Đăng kí</button>
-            <p><br>Bạn đã có tài khoản? <a href="login.php">Đăng nhập</a></p>
-        </div>
-    </form>
-</div>
+    </div>
 
 <?php endif; ?>
-
+<?php //endif; ?>
 <?php include 'footer.php'; ?>
