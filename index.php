@@ -1,5 +1,6 @@
 <?php
 require_once 'init.php';
+
 ?>
 <?php include 'header.php'; ?>
 <?php $posts = getNewsFeed(); ?>
@@ -37,39 +38,38 @@ if (isset($_POST['Posts'])) {
                 Nội dung không được rỗng và dài quá 1024 ký tự!
             </div>
         <?php endif; ?>
-
         <?php foreach ($posts as $post) : ?>
             <form method="POST">
                 <div class="card" style="margin-bottom: 10px;">
                     <div class="card-body">
+                    <?php ob_start(); ?>
                         <h5 class="card-title">
-                           <img style="width: 80px;" src="<?php echo 'data:image/jpeg;base64,' . base64_encode($post['profilePicture']); ?>" class="card-img-top" alt="<?php echo $post['firstname'] . ' ' . $post['lastname']; ?>">
+                           <img style="width:80px;" src="<?php echo 'data:image/jpeg;base64,'.base64_encode($post['profilePicture']);?>" class="card-img-top" alt="<?php echo $post['firstname'] . ' ' . $post['lastname']; ?>">
                             <?php echo $post['firstname'] . ' ' . $post['lastname']; ?>
                         </h5>
                         <p class="card-text">
                             <small>Đăng lúc: <?php echo $post['post_time'] ?> </small>
-                            <p>
+                            <p> 
                                 <h6><strong><?php echo $post['content'] ?></strong></h6>
                             </p>
                         </p>
                         <?php if ($post['id'] == $currentUser['id']):?>
-                            <button type="submit" name="delete" value="<?php echo $post['postID'] ?>" class="btn btn-danger">Xóa</button>
                             <?php 
                                 if (isset($_POST['delete']))
                                 {
-                                    //$value = $_POST['delete'];
-                                    DeleteContentbyID($_POST['delete']);
-                                    //exit(header("Location: index.php"));
-                                    //header('Location: index.php');
+                                    $value = $_POST['delete'];
+                                    DeleteContentbyID($value);
+                                   header('Location: index.php');
                                 }   
-                            ?>
+                            ?>   
+                            <button type="submit" name="delete" value="<?php echo $post['postID'] ?>" class="btn btn-danger">Xóa</button>
+                    <?php ob_end_flush(); ?>        
                         <?php else : ?>
                         <?php endif; ?>
                     </div>
                 </div>
             </form>
         <?php endforeach; ?>
-
 
     <?php else : ?>
         <h1>Chào mừng bạn đã đến với trang web.</h1>

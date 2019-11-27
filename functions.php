@@ -143,7 +143,8 @@ function createPost($userID, $content)
 function showPost($id)
 {
         global $db;
-        $stmt = $db->prepare("SELECT us.postID, uc.profilePicture,uc.firstname,uc.lastname,us.post_time,us.content FROM `user_posts` us, user_accounts uc Where us.id= ? and us.id=uc.id");
+        $stmt = $db->prepare("SELECT us.postID, uc.profilePicture,uc.firstname,uc.lastname,us.post_time,us.content FROM `user_posts` us, user_accounts uc Where us.id= ?
+                                and us.id=uc.id order by `post_time` DESC");
         $stmt->execute(array($id));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
