@@ -34,6 +34,10 @@ if ($current_page > $total_page) {
 }
 // Tìm Start
 $start = ($current_page - 1) * $limit;
+if($start < 0)
+{
+    $start = 0;
+}
 ?>
 <?php $posts = getNewsFeed($start, $limit); ?>
 <div class="col-md-6 offset-md-3">
@@ -63,7 +67,6 @@ $start = ($current_page - 1) * $limit;
                     <div class="card-body">
                         <?php ob_start(); ?>
                         <h5 class="card-title">
-
                             <img style="width:80px;" src="<?php echo 'data:image/jpeg;base64,' . base64_encode($post['profilePicture']); ?>" class="card-img-top" alt="<?php echo $post['firstname'] . ' ' . $post['lastname']; ?>">
                             <?php echo $post['firstname'] . ' ' . $post['lastname']; ?>
                         </h5>
@@ -88,7 +91,6 @@ $start = ($current_page - 1) * $limit;
                     </div>
                 </div>
             </form>
-
         <?php endforeach; ?>
         <!-- Hiển thị phân trang -->
         <ul class="pagination modal-1">
