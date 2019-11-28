@@ -5,6 +5,7 @@ require_once 'init.php';
 <?php $posts = getNewsFeed(); ?>
 <?php
 $success = true;
+
 if (isset($_POST['Posts'])) {
     $content = $_POST['content'];
     $lengh = strlen($content);
@@ -57,19 +58,21 @@ if (isset($_POST['Posts'])) {
                             <button type="submit" name="delete" value="<?php echo $post['postID'] ?>" class="btn btn-danger">Xóa</button>
 
                             <?php
+                            
                                         if (isset($_POST['delete'])) {
                                             //$value = $_POST['delete'];
+                                            
                                             DeleteContentbyID($_POST['delete']);
-                                            //exit(header("Location: index.php"));
-                                            //header('Location: index.php');
+                                            header('Location: /index.php');
+                                                
                                         }
                                         ?>
                         <?php else : ?>
-                        <?php endif; ?>
+                        <?php endif;?>
                     </div>
                 </div>
             </form>
-        <?php endforeach; ?>
+        <?php endforeach;?>
 
 
     <?php else : ?>
