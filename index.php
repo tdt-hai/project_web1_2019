@@ -1,6 +1,6 @@
 <?php
 require_once 'init.php';
-
+ ob_start();
 ?>
 <?php include 'header.php'; ?>
 <!-- <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'> -->
@@ -46,7 +46,6 @@ if ($start < 0) {
             <div class="panel-body">
                 <h4>Gợi ý kết bạn</h4>
                 <ul>
-                        <?php ob_start(); ?>
                         <?php $Suggestion = getSuggestionFriend();?>
                         <?php foreach ($Suggestion as $S) : ?>
                             <?php   if(($currentUser['id'] !==  $S['id'])){?>
@@ -55,7 +54,6 @@ if ($start < 0) {
                             </li>  
                            <?php } ?>
                         <?php endforeach; ?>
-                        <?php ob_end_flush(); ?>
                 </ul>
             </div>
         </div>
@@ -80,7 +78,6 @@ if ($start < 0) {
                     Nội dung không được rỗng và dài quá 1024 ký tự!
                 </div>
             <?php endif; ?>
-            <?php ob_start(); ?>
             <?php foreach ($posts as $post) : ?>
                 <form method="POST">
                     <div class="card" style="margin-bottom: 10px;">
@@ -110,7 +107,6 @@ if ($start < 0) {
                     </div>
                 </form>
             <?php endforeach; ?>
-            <?php ob_end_flush(); ?>
             <!-- Hiển thị phân trang -->
             <ul class="pagination modal-1">
                 <?php if ($current_page > 1 && $total_page > 1) {
@@ -138,4 +134,5 @@ if ($start < 0) {
         <?php endif; ?>
     </div>
 </div>
+<?php ob_end_flush(); ?>
 <?php include 'footer.php'; ?>
