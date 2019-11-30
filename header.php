@@ -15,6 +15,7 @@
         </style>
          <link rel="stylesheet" type="text/css" href="./css_files/main.css">
         <title>BTN</title>
+        <?php ///require_once 'init.php'; ?>
     </head>
 
     <body>
@@ -55,7 +56,7 @@
                                     nhân</a>
                                 <a class="dropdown-item" href="changePassword.php">Đổi mật
                                     khẩu</a>
-                                    <a class="dropdown-item" href="information.php">Trang cá
+                                    <a class="dropdown-item"href="information.php?id=<?php echo $currentUser['id'];?>">Trang cá
                                       nhân</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="logout.php">Đăng xuất
