@@ -9,42 +9,17 @@ if (!$currentUser) {
 <?php include 'header.php'; ?>
 
 <h1>Đổi thông tin cá nhân</h1>
-<?php if ("POST" == $_SERVER["REQUEST_METHOD"]) : ?>
     <?php
-        
+     if ("POST" == $_SERVER["REQUEST_METHOD"]) {
         $f_name = $_POST['f-name'];
         $l_name = $_POST['l-name'];
         $birthday = $_POST['b-date'];
         $phonenumber = $_POST['phoneNumber'];
-        $check = false;
-
-        //var_dump ($_POST['f-name']);
-        
-        // Check
-        if(empty($f_name))
-                {
-                ?>
-                 <div class="alert alert-danger" role="alert">
-                        Không được bỏ trống Họ. <a href="./updateProfile.php">Quay lại</a>
-                 </div>
-                <?php
-                } else if(empty($l_name))
-                {
-                ?>
-                 <div class="alert alert-danger" role="alert">
-                        Không được bỏ trống Tên. <a href="./updateProfile.php">Quay lại</a>
-                 </div>
-                <?php 
-                }
-
         // Upload Image
         $fileSize = $_FILES['profilePicture']['size'];
         if (isset($_FILES['profilePicture'])) {
             $fileName = $_FILES['profilePicture']['name'];
             $fileTmp  = $_FILES['profilePicture']['tmp_name'];
-            // $fileArr = explode('.', $fileName);
-            //$newImageName = 'avatar_' . $currentUser['username'] . '.jpg' /* . $fileArr[1]*//* $fileArr[1] is ending of fileName (.jpg/.jpeg ...) */;
-
             if (isset($fileName) && !empty($fileName)) {
                 // lay duoi file
                 $extension = substr($fileName, strpos($fileName, '.') + 1);
@@ -53,40 +28,56 @@ if (!$currentUser) {
 
                     $imagetmp = file_get_contents($fileTmp);
                     if (updateUserProfilePicture($currentUser['id'], $imagetmp) && !empty(trim($f_name)) && !empty(trim($l_name))) {
-                       
                         updateUserProfile($currentUser['id'], $f_name, $l_name, $phonenumber, $birthday);
-                        $noti_succ = 'Thông tin cập nhật thành công! <a href="index.php">Trở về trang chủ.</a>';
-                        $check     = true;
+                        ?>
+                            <div class=" pull-left col-sm-7"></div>
+                            <div class="alert alert-primary pull-right col-sm-5" role="alert" >
+                                Thông tin cập nhật thành công!
+                            </div>
+                        <?php
                         updateUserProfilePicture($currentUser['id'], $imagetmp);
                     } else {
                         ?>
-                    <div class="alert alert-warning" role="alert">
-                        Cập nhật ảnh đại diện thất bại <a href="./update-profile.php">Quay lại</a>
+                            <div class="alert alert-warning" role="alert">
+                                Cập nhật ảnh đại diện thất bại <a href="./update-profile.php">Quay lại</a>
+                            </div>
+                        <?php
+                    }
+                    } else {
+                    ?>
+                        <div class="alert alert-danger" role="alert">
+                            Chỉ hỗ trợ file JPG và dung lượng nhỏ hơn hoặc bằng 5Mb.
+                        </div>
+                    <?php
+                }
+            } 
+            else if (empty($f_name) || empty($l_name) || empty($birthday) || empty($phonenumber))
+            {
+                ?>
+                <div class="alert alert-danger" role="alert">
+                    Không được bỏ trống
+                </div>
+                <?php
+            }
+            else if ( strlen($phonenumber) > 10)
+            {
+                ?>
+                    <div class="alert alert-danger" role="alert">
+                        Số điện thoại nhập không đúng
                     </div>
                 <?php
-
-                                }
-                            } else {
-                                ?>
-                <div class="alert alert-danger" role="alert">
-                    Chỉ hỗ trợ file JPG và dung lượng nhỏ hơn hoặc bằng 5Mb. <a href="./updateProfile.php">Quay lại</a>
-                </div>
-    <?php
-                }
-            } else {
+            }
+            else {
                 updateUserProfile($currentUser['id'], $f_name, $l_name, $phonenumber, $birthday);
-                $noti_succ = 'Thông tin cập nhật thành công! <a href="index.php">Trở về trang chủ.</a>';
-                $check = true;
+                ?>
+                    <div class="alert alert-primary" role="alert">
+                    Thông tin cập nhật thành công!
+                    </div>
+                <?php
             }
         }
-        ?>
-    <?php if ($check) : ?>
-        <div class="alert alert-success" role="alert">
-            <?php echo $noti_succ; ?>
-        </div>
-    <?php endif; ?>
-
-<?php else : ?>
+}
+?>
     <div>
         <form action="updateProfile.php" method="POST" enctype="multipart/form-data">
             <div class="form-group">
@@ -119,11 +110,4 @@ if (!$currentUser) {
             </div>
         </form>
     </div>
-
-<?php endif; ?>
-
 <?php include 'footer.php'; ?>
-
-<?php
-
-?>
