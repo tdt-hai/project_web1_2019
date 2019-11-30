@@ -126,7 +126,7 @@ function resizeImage($filename, $max_width, $max_height)
 }
 
 /// Get newsfeed
-function getNewsFeed($start,$limit)
+function getNewsFeed($start, $limit)
 {
         global $db;
         $stmt = $db->prepare('SELECT p.*, u.firstname, u.lastname, u.username, u.profilePicture FROM `user_posts` AS p
@@ -244,4 +244,52 @@ function totalpage()
         foreach ($result as $row) {
                 return $row['total'];
         }
+}
+//
+function findrelationship($userid1, $userid2)
+{
+        global $db;
+        $stmt = $db->prepare("SELECT * FROM friends WHERE UserID_1 = ? AND UserID_2 = ? OR UserID_1 = ? AND UserID_2 = ?");
+        $stmt->execute(array($userid1, $userid2, $userid2, $userid1));
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+function Send_Accept_FriendRequest($userid1, $userid2)
+{
+        global $db;
+        $stmt = $db->prepare("INSERT INTO friends(UserID_1,UserID_2) VALUES(?, ?)");
+        $stmt->execute(array($userid1, $userid2));
+}
+function cancel_delete_FriendRequest($userid1, $userid2)
+{
+        global $db;
+        $stmt = $db->prepare("DELETE FROM friends WHERE ( UserID_1 = ? AND UserID_2 = ?) OR ( UserID_1 = ? AND UserID_2 = ?) ");
+        $stmt->execute(array($userid1, $userid2, $userid2, $userid1));
+}
+function getFriends($userId)
+{
+        global $db;
+        $stmt = $db->prepare("SELECT * FROM friends WHERE UserID_1 = ? OR UserID_2 = ?");
+        $stmt->execute(array($userId, $userId));
+        $followings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $friends = array();
+        for ($i = 0; $i < count($followings); $i++) {
+                $row1 = $followings[$i];
+                if ($userId == $row1['UserID_1']) {
+                        $userId2 = $row1['UserID_2'];
+                        for ($j = 0; $j < count($followings); $j++) {
+                                $row2 = $followings[$j];
+                                if ($userId == $row2['UserID_2'] && $userId2 == $row2['UserID_1']) {
+                                        $friends[] = findUserById($userId2);
+                                }
+                        }
+                }
+        }
+        return $friends;
+}
+//Lấy danh sách tất cả accouts trong db
+function getSuggestionFriend() {
+        global $db;
+        $stmt = $db->prepare("SELECT * FROM `user_accounts`");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }

@@ -51,7 +51,7 @@ if (!$currentUser) {
                     <?php
                 }
             } 
-            else if (empty($f_name) || empty($l_name))
+            else if (empty($f_name) || empty($l_name) || empty($birthday) || empty($phonenumber))
             {
                 ?>
                 <div class="alert alert-danger" role="alert">
@@ -59,7 +59,14 @@ if (!$currentUser) {
                 </div>
                 <?php
             }
-
+            else if ( strlen($phonenumber) > 10)
+            {
+                ?>
+                    <div class="alert alert-danger" role="alert">
+                        Số điện thoại nhập không đúng
+                    </div>
+                <?php
+            }
             else {
                 updateUserProfile($currentUser['id'], $f_name, $l_name, $phonenumber, $birthday);
                 ?>
