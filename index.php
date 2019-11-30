@@ -3,7 +3,7 @@ require_once 'init.php';
 
 ?>
 <?php include 'header.php'; ?>
-<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+<!-- <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'> -->
 <link rel="stylesheet" type="text/css" href="./css_files/style_page.css">
 <?php
 $success = true;
@@ -40,13 +40,13 @@ if ($start < 0) {
 ?>
 <?php $posts = getNewsFeed($start, $limit); ?>
 <?php if ($currentUser) : ?>
-<?php ob_start(); ?>
 <div class="row">
     <div class="col-md-3">
         <div class="panel panel-default">
             <div class="panel-body">
                 <h4>Gợi ý kết bạn</h4>
                 <ul>
+                        <?php ob_start(); ?>
                         <?php $Suggestion = getSuggestionFriend();?>
                         <?php foreach ($Suggestion as $S) : ?>
                             <?php   if(($currentUser['id'] !==  $S['id'])){?>
@@ -55,6 +55,7 @@ if ($start < 0) {
                             </li>  
                            <?php } ?>
                         <?php endforeach; ?>
+                        <?php ob_end_flush(); ?>
                 </ul>
             </div>
         </div>
@@ -79,6 +80,7 @@ if ($start < 0) {
                     Nội dung không được rỗng và dài quá 1024 ký tự!
                 </div>
             <?php endif; ?>
+            <?php ob_start(); ?>
             <?php foreach ($posts as $post) : ?>
                 <form method="POST">
                     <div class="card" style="margin-bottom: 10px;">
