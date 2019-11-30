@@ -1,12 +1,11 @@
 <?php
 require_once 'init.php';
-
 ?>
 <?php include 'header.php'; ?>
-<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
-<link rel="stylesheet" type="text/css" href="./css_files/style_page.css">
+<?php $posts = getNewsFeed(); ?>
 <?php
 $success = true;
+
 if (isset($_POST['Posts'])) {
     $content = $_POST['content'];
     $lengh = strlen($content);
