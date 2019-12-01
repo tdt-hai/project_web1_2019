@@ -16,6 +16,7 @@
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <link rel="stylesheet" href="./css_files/lte/icheck-bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="./css_files/lte/adminlte.min.css">
     <!-- Google Font: Source Sans Pro -->
@@ -29,7 +30,7 @@
 <body>
     <div class="wrapper" >
     <!-- Navbar main-header-->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand navbar-primary navbar-dark">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'index' ? 'active' : ''; ?>">

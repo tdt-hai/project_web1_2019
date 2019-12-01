@@ -34,7 +34,7 @@ if (isset($_POST['Posts'])) {
         header('Location:information.php?id='.$currentUser['id']);
     }
 }
-$friends = getFriends($currentUser['id']); 
+$friends = getFriends($users['id']); 
 ?>
 <?php include 'header.php'; ?>
 <!-- --------------------------------------- -->
@@ -65,11 +65,11 @@ $friends = getFriends($currentUser['id']);
                                     href="mailto:<?php echo $users['email']; ?>"
                                     target="_blank"><?php echo $users['email']; ?></a>
                                 <ul class="list-group list-group-unbordered mb-3">
+                                    <?php if($friends  || ($users['id'] == $currentUser['id'])){?>
                                     <li class="list-group-item">
-                                        <?php if (($currentUser['id'] == $users['id']) ){?>
                                         <b>Bạn bè</b> <a class="float-right"><?php echo count($friends); ?></a>
-                                        <?php }?>
                                     </li>
+                                    <?php }?>
                                 </ul>
                                 <?php if ($users['id'] != $currentUser['id']) : ?>
                                 <form action="friend.php" method="POST">
@@ -105,14 +105,14 @@ $friends = getFriends($currentUser['id']);
                             <strong><i class="fas fa-book mr-1"></i> Education</strong>
 
                             <p class="text-muted">
-                                B.S. in Computer Science from the University of Tennessee at Knoxville
+                                Khoa học Tự nhiên
                             </p>
 
                             <hr>
 
                             <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
 
-                            <p class="text-muted">Malibu, California</p>
+                            <p class="text-muted">Ho Chi Minh, VietNam</p>
 
                             <hr>
 
@@ -257,6 +257,7 @@ $friends = getFriends($currentUser['id']);
                                                         <span class="username">
                                                             <a href="#" class="dropdown-toggle"
                                                                 data-toggle="dropdown"><?php echo $post['firstname'] . ' ' . $post['lastname']; ?></a>
+                                                            <?php if($currentUser['id'] == $users['id']){ ?>
                                                             <ul class="dropdown-menu">
                                                                 <li><a href="#"><i class="fas fa-globe-americas"></i>
                                                                         <span>public</span></a></li>
@@ -265,13 +266,14 @@ $friends = getFriends($currentUser['id']);
                                                                 <li><a href="#"><i class="fas fa-lock"></i>
                                                                         <span>private</span></a></li>
                                                             </ul>
+                                                            <?php }?>
                                                             <?php
-                                                                            if (isset($_POST['delete'])) {
+                                                                    if (isset($_POST['delete'])) {
                                                                                 $value = $_POST['delete'];
                                                                                 DeleteContentbyID($value);
                                                                                 header('Location:information.php?id='.$currentUser['id']);
-                                                                            }
-                                                                        ?>
+                                                                    }
+                                                            ?>
                                                             <?php if ($currentUser['id'] == $users['id']){?>
                                                             <button type="submit" name="delete"
                                                                 value="<?php echo $post['postID'] ?>"
@@ -294,22 +296,24 @@ $friends = getFriends($currentUser['id']);
                                                                 class="fas fa-share mr-1"></i> Chia sẻ</a>
                                                         <span class="float-right">
                                                             <a href="#" class="link-black text-sm">
-                                                                <i class="far fa-comments mr-1"></i> Comments (5)
+                                                                <i class="far fa-comments mr-1"></i> Bình luận (5)
                                                             </a>
                                                         </span>
                                                     </p>
-
-                                                    <form class="form-horizontal">
+                                                    <?php if($currentUser['id'] == $users['id'] ) { ?>
+                                                    <form method="POST"
+                                                        action="information.php?id=<?php echo $users['id']; ?> "
+                                                        class="form-horizontal">
                                                         <div class="input-group input-group-sm mb-0">
-                                                            <input class="form-control form-control-sm"
-                                                                placeholder="comment">
+                                                            <input class="form-control form-control-sm" id="comment"
+                                                                name="comment" placeholder="Bình luận tại đây">
                                                             <div class="input-group-append">
-                                                                <button type="submit"
-                                                                    class="btn btn-danger">Gửi</button>
+                                                                <input class="btn btn-primary" type="submit"
+                                                                    name="Comments" value="Bình luận">
                                                             </div>
                                                         </div>
                                                     </form>
-
+                                                    <?php }?>
                                                 </div>
                                             </form>
                                         </div>
@@ -332,18 +336,16 @@ $friends = getFriends($currentUser['id']);
                             <div class="tab-content">
                                 <div class="panel panel-default">
                                     <div class="panel-body">
-                                        <?php if (($currentUser['id'] == $users['id']) ){?>
                                         <h4>Danh sách bạn bè</h4>
                                         <ul>
                                             <?php foreach ($friends as $friend) : ?>
                                             <?php ?>
                                             <li>
                                                 <a
-                                                    href="information.php?id=<?php echo $friend['id']; ?>"><?php echo $friend['firstname'];echo $friend['lastname']; ?></a>
+                                                    href="information.php?id=<?php echo $friend['id']; ?>"><?php echo $friend['firstname'].' '.$friend['lastname']; ?></a>
                                             </li>
                                             <?php endforeach; ?>
                                         </ul>
-                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>
