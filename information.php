@@ -215,7 +215,7 @@ $friends = getFriends($currentUser['id']);
                                                     {
                                                       $img = $_FILES['UploadImage']['name'];
                                                       $imagetmp = file_get_contents($fileTmp);
-                                                    }
+                                                        }
                                                 ?>
                                                  <img id="blah"  class = "imgPreview" src="#" alt="" />
                                                 </div>
