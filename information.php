@@ -23,8 +23,14 @@ if (isset($_POST['Posts'])) {
     $lengh = strlen($content);
     if ($lengh == 0 || $lengh > 1024) {
         $success = false;
-    } else {
+    } if($success && !$imagetmp ) {
         createPost($users['id'], $content);
+        header('Location:information.php?id='.$currentUser['id']);
+        
+    }
+    if($success && $imagetmp)
+    {
+        uploadImageOnTimeline($user['id'],$content,$imagetmp);
         header('Location:information.php?id='.$currentUser['id']);
     }
 }
@@ -144,9 +150,84 @@ $friends = getFriends($currentUser['id']);
                                             <form method="POST"
                                                 action="information.php?id=<?php echo $users['id']; ?> ">
                                                 <div class="form-group">
+                                                    
+                                                    <style>
+                                                        .imgPreview{
+                                                            border-radius: 8px;
+                                                            display: block;
+                                                            margin-left: auto;
+                                                            margin-right: auto;
+                                                         
+                                                            object-fit: cover;
+                                                        }
+                                                        .choose_file{
+                                                                    position:relative;
+                                                                    display:inline-block;    
+                                                                    border-radius:8px;
+                                                                    border:#ebebeb solid 1px;
+                                                                    width:75px; 
+                                                                    padding: 4px 6px 4px 8px;
+                                                                    font: normal 14px Myriad Pro, Verdana, Geneva, sans-serif;
+                                                                    color: #7f7f7f;
+                                                                    margin-top: 2px;
+                                                                    background:white
+                                                                }
+                                                                .choose_file input[type="file"]{
+                                                                    -webkit-appearance:none; 
+                                                                    position:absolute;
+                                                                    top:0; left:0;
+                                                                    opacity:0; 
+                                                                }
+                                                    </style>
                                                     <textarea class="form-control" id="content" name="content"
                                                         placeholder="Bạn đang nghĩ gì..."></textarea>
+
+                                                    <!-- <button type = "buttton" name = "insertPicture"  > <i class="fas fa-images"></i>
+                                                    </button>    -->
+                                                    <style>
+                                                     
+                                                    </style>
+                                                    <script>
+                                                        function readURL(input) {
+                                                            if (input.files && input.files[0]) {
+                                                                var reader = new FileReader();
+
+                                                                reader.onload = function (e) {
+                                                                    $('#blah')
+                                                                        .attr('src', e.target.result)
+                                                                        .width(150)
+                                                                        .height(200);
+                                                                };
+
+                                                                reader.readAsDataURL(input.files[0]);
+                                                            }
+                                                        }
+                                                    </script>
+                                                    <div class="choose_file">
+                                                        <span>Ảnh  <i class="fas fa-images"></i>
+                                                                        </span>
+                                                        <input name="UploadImage" id = "UploadImage"  type="file" accept = "image/jpeg" onchange ="readURL(this);" />
+                                                    </div>
+                                                   
+                                                <?php
+                                                    if(isset($_FILES['UploadImage']))
+                                                    {
+                                                      $img = $_FILES['UploadImage']['name'];
+                                                      $imagetmp = file_get_contents($fileTmp);
+                                                      var_dump("tesss");
+                                                    }
+                                                ?>
+                                                 <img id="blah"  class = "imgPreview" src="#" alt="" />
                                                 </div>
+                                                <?php 
+                                                    var_dump("test");
+                                                    if (isset($_FILES['UploadImage'])) {
+                                                        $fileName = $_FILES['UploadImage']['name'];
+                                                        $fileTmp  = $_FILES['UploadImage']['tmp_name'];
+                                                        var_dump("test");
+                                                        $imagetmp = file_get_contents($fileTmp);
+                                                    }
+                                                ?>
                                                 <div class="form-group">
                                                     <input class="btn btn-primary" type="submit" name="Posts"
                                                         value="Đăng">
