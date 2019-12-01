@@ -199,6 +199,7 @@ $friends = getFriends($currentUser['id']);
                                                                         .height(200);
                                                                 };
 
+
                                                                 reader.readAsDataURL(input.files[0]);
                                                             }
                                                         }
@@ -214,7 +215,6 @@ $friends = getFriends($currentUser['id']);
                                                     {
                                                       $img = $_FILES['UploadImage']['name'];
                                                       $imagetmp = file_get_contents($fileTmp);
-                                                      var_dump("tesss");
                                                     }
                                                 ?>
                                                  <img id="blah"  class = "imgPreview" src="#" alt="" />
