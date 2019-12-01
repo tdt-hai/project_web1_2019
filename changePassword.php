@@ -7,84 +7,124 @@ if (!$currentUser) {
 }
 ?>
 <?php include 'header.php'; ?>
+<div class="hold-transition register-page">
+    <div class="login-box">
+    <?php
+        if ("POST" == $_SERVER["REQUEST_METHOD"]){
+                $currentPass = $_POST['currentPass'];
+                $newPass     = $_POST['newPass'];
+                $repass      = $_POST['re-password'];
+                $check = false;
+                // Check
+                if (!empty(trim($currentPass)) && !empty(trim($newPass)) && !empty(trim($repass))) {
+                if (password_verify($currentPass, $currentUser['password'])) {
+                if (strlen(trim($newPass)) >= 6 && strlen(trim($newPass)) <= 15) {
+                if ($currentPass != $newPass) {
+                    if ($newPass == $repass) {
+                        updateUserPassword($currentUser['email'], $newPass);
+                        ?>
+        <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Thành công!</h5>
+                        Thay đổi mật khẩu thành công!
+        </div>
+        <?php
+                    } else {
+                        ?>
+        <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
+                        Mật khẩu xác nhận không chính xác!
+        </div>
+        <?php
+                    }
+                } else {
+                    ?>
+         <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
+                        Mật khẩu mới phải khác mật khẩu cũ!
+        </div>
+        <?php
+                }
+                } else {
+                    ?>
+        <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
+                        Vui lòng nhập mật khẩu từ 6 đến 15 ký tự!
+        </div>
+        <?php
+                }
+                } else {
+                    ?>
+         <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
+                        Mật khẩu hiện tại không đúng!
+        </div>
+        <?php
+                }
+                } else {
+                    ?>
+        <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
+                        Vui lòng nhập đầy đủ thông tin!
+        </div>
+        <?php
+                }
+        }
+    ?>
 
-<h1>Đổi mật khẩu</h1>
-<?php if ("POST" == $_SERVER["REQUEST_METHOD"]): ?>
-<?php
+        <div class="login-logo">
+            <a><b>Lotus</b></a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Đổi mật khẩu tại đây :))
+                </p>
 
-$currentPass = $_POST['currentPass'];
-$newPass     = $_POST['newPass'];
-$repass      = $_POST['re-password'];
+                <form  action="changePassword.php" method="POST">
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" placeholder="Mật khẩu hiện tại" id="currentPass" name="currentPass">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" placeholder="Mật khẩu mới" id="newPass" name="newPass">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" placeholder="Nhập lại mật khẩu" id="re-password" name="re-password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-block">Thay đổi</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </form>
 
-$check = false;
-
-// Check
-if (!empty(trim($currentPass)) && !empty(trim($newPass)) && !empty(trim($repass))) {
- if (password_verify($currentPass, $currentUser['password'])) {
-  if (strlen(trim($newPass)) >= 6 && strlen(trim($newPass)) <= 15) {
-   if ($currentPass != $newPass) {
-    if ($newPass == $repass) {
-     // Updating
-     
-            updateUserPassword($currentUser['email'], $newPass);
-            $noti_succ = 'Thay đổi mật khẩu thành công! <a href="index.php">Trở về trang chủ.</a>';
-            $check     = true;
-    } else {
-            $noti_err_pass = 'Mật khẩu xác nhận không chính xác! <a href="changePassword.php">Trở về.</a>';
-            $check         = false;
-    }
-   } else {
-            $noti_err_pass = 'Mật khẩu mới phải khác mật khẩu cũ! <a href="changePassword.php">Trở về.</a>';
-            $check         = false;
-   }
-  } else {
-            $noti_err_pass = 'Vui lòng nhập mật khẩu từ 6 đến 15 ký tự! <a href="changePassword.php">Trở về.</a>';
-            $check         = false;
-  }
- } else {
-            $noti_err_pass = 'Mật khẩu hiện tại không đúng! <a href="changePassword.php">Trở về.</a>';
-            $check         = false;
- }
-} else {
-            $noti_err_pass = 'Vui lòng nhập đầy đủ thông tin! <a href="changePassword.php">Trở về.</a>';
-            $check         = false;
-}
-?>
-
-<?php if ($check): ?>
-<div class="alert alert-success" role="alert">
-    <?php echo $noti_succ; ?>
+                <p class="mt-3 mb-1">
+                    <a href="login.php">Đăng nhập</a>
+                </p>
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
 </div>
-<?php else: ?>
-<div class="alert alert-danger" role="alert">
-    <?php echo $noti_err_pass; ?>
-</div>
-<?php endif; ?>
-
-<?php else: ?>
-<div>
-    <form action="changePassword.php" method="POST">
-        <div class="form-group">
-            <label for="currentPass">Mật khẩu hiện tại</label>
-            <input type="password" class="form-control" id="currentPass" name="currentPass"
-                   placeholder="Mật khẩu hiện tại">
-        </div>
-        <div class="form-group">
-            <label for="newPass">Mật khẩu mới</label>
-            <input type="password" class="form-control" id="newPass" name="newPass"
-                   placeholder="Mật khẩu mới">
-        </div>
-        <div class="form-group">
-            <label for="re-password">Nhập lại mật khẩu mới</label>
-            <input type="password" class="form-control" id="re-password" name="re-password"
-                   placeholder="Xác nhận lại mật khẩu">
-        </div>
-        <div>
-            <button type="submit" class="btn btn-primary">Xác nhận</button>
-        </div>
-    </form>
-</div>
-
-<?php endif; ?>
-
 <?php include 'footer.php'; ?>

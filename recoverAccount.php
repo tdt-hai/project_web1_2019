@@ -8,64 +8,97 @@ if ($currentUser) {
 ?>
 <?php include 'header.php'; ?>
 
-    <h1>Đổi mật khẩu</h1>
-    <?php if ("POST" == $_SERVER["REQUEST_METHOD"]): ?>
-    <?php
-$newPass = $_POST['newPass'];
-$repass = $_POST['re-password'];
+<div class="hold-transition login-page">
+    <div class="login-box">
+        <?php if ("POST" == $_SERVER["REQUEST_METHOD"]){ ?>
+        <?php
+            $newPass = $_POST['newPass'];
+            $repass = $_POST['re-password'];
 
-$check = false;
-// Check
-if (!empty(trim($newPass)) &&!empty(trim($repass))) {
-  if (strlen(trim($newPass)) >= 6 && strlen(trim($newPass)) <= 15) {
-    if ($newPass == $repass) {
-     // Updating
-     updateUserPassword($_SESSION['userEmail'], $newPass);
-     $noti_succ = 'Thay đổi mật khẩu thành công! <a href="index.php">Trở về trang chủ.</a>';
-     $check = true;
-    } else {
-     $noti_err_pass = 'Mật khẩu xác nhận không chính xác! <a href="recoverAccount.php">Trở về.</a>';
-     $check = false;
-    }
-  } else {
-   $noti_err_pass = 'Vui lòng nhập mật khẩu từ 6 đến 15 ký tự! <a href="recoverAccount.php">Trở về.</a>';
-   $check = false;
-  }
-} else {
- $noti_err_pass = 'Vui lòng nhập đầy đủ thông tin! <a href="recoverAccount.php">Trở về.</a>';
- $check = false;
-}
-?>
-
-    <?php if ($check): ?>
-    <div class="alert alert-success" role="alert">
-        <?php echo $noti_succ; ?>
-    </div>
-    <?php else: ?>
-    <div class="alert alert-danger" role="alert">
-        <?php echo $noti_err_pass; ?>
-    </div>
-    <?php endif; ?>
-
-    <?php else: ?>
-    <div>
-        <form action="recoverAccount.php" method="POST">
-            <div class="form-group">
-                <label for="newPass">Mật khẩu mới</label>
-                <input type="password" class="form-control" id="newPass" name="newPass"
-                       placeholder="Mật khẩu mới">
+            $check = false;
+            // Check
+            if (!empty(trim($newPass)) &&!empty(trim($repass))) {
+                if (strlen(trim($newPass)) >= 6 && strlen(trim($newPass)) <= 15) {
+                    if ($newPass == $repass) {
+                        updateUserPassword($_SESSION['userEmail'], $newPass);
+                        $check = true;
+                        ?>
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Thành công!</h5>
+                        Thay đổi mật khẩu thành công!
+                    </div>
+                    <?php
+                    } else {
+                        ?>
+                    <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
+                        Mật khẩu xác nhận không chính xác!
+                    </div>
+                    <?php
+                    }
+                } else {
+                    ?>
+                    <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
+                        Vui lòng nhập mật khẩu từ 6 đến 15 ký tự! 
+                    </div>
+                    <?php 
+                }
+            } else {
+                ?>
+                    <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
+                        Vui lòng nhập đầy đủ thông tin!
+                    </div>
+                    <?php
+            }
+            }
+        ?>
+        <div class="login-logo">
+            <a><b>Lotus</b></a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg"> Bạn chỉ còn một bước nữa từ mật khẩu mới, khôi phục mật khẩu của bạn ngay bây
+                    giờ.</p>
+                <form action="recoverAccount.php" method="POST">
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" placeholder="Mật khẩu mới" id="newPass"
+                            name="newPass">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" placeholder="Nhập lại mật khẩu" id="re-password"
+                            name="re-password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-block">Đổi mật khẩu</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </form>
+                <p class="mt-3 mb-1">
+                    <a href="login.php">Đăng nhập</a>
+                </p>
             </div>
-            <div class="form-group">
-                <label for="re-password">Nhập lại mật khẩu mới</label>
-                <input type="password" class="form-control" id="re-password" name="re-password"
-                       placeholder="Xác nhận lại mật khẩu">
-            </div>
-            <div>
-                <button type="submit" class="btn btn-primary">Xác nhận</button>
-            </div>
-        </form>
+            <!-- /.login-card-body -->
+        </div>
     </div>
-
-    <?php endif; ?>
+</div>
 
 <?php include 'footer.php'; ?>
