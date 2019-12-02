@@ -66,7 +66,7 @@ if (!$currentUser) {
                             </div>
                         <?php
                     }
-                    else if ( strlen($phonenumber) > 10)
+                    else if ( strlen($phonenumber) > 10 || strlen($phonenumber) < 10 || !is_numeric($phonenumber))
                     {
                         ?>
                             <div class="alert alert-warning alert-dismissible">

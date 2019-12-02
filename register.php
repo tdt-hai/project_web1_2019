@@ -73,7 +73,7 @@ if ($currentUser) {
                 <?php
                                                 }
                                             } else {
-                                                if (strlen(trim($phonenumber)) > 10) {
+                                                if (strlen(trim($phonenumber)) > 10 || strlen(trim($phonenumber)) < 10 || !is_numeric($phonenumber)) {
                                                     ?>
                 <div class="alert alert-warning alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
