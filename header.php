@@ -6,7 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style type="text/css">
     </style>
     <!-- Tell the browser to be responsive to screen width -->
@@ -28,31 +29,33 @@
 </head>
 
 <body>
-    <div class="wrapper" >
-    <!-- Navbar main-header-->
-    <nav class="navbar navbar-expand navbar-primary navbar-dark">
+    <div class="wrapper">
+        <!-- Navbar main-header-->
+        <nav class="navbar navbar-expand navbar-primary navbar-dark">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
+                <?php if (!$currentUser) : ?>
+                <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'login' ? 'active' : ''; ?>">
+                    <a href="login.php" class=" nav-link fas fa-sign-in-alt"> Đăng nhập</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'register' ? 'active' : ''; ?>">
+                    <a href="register.php" class="nav-link fas fa-registered"> Đăng kí</a>
+                </li>
+                <?php else : ?>
                 <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'index' ? 'active' : ''; ?>">
                     <a class="nav-link fa fa-home" href="index.php"> Trang chủ</a>
                 </li>
-                <?php if (!$currentUser) : ?>
-                        <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'login' ? 'active' : ''; ?>">
-                            <a href="login.php" class=" nav-link fas fa-sign-in-alt"> Đăng nhập</a>
-                        </li>
-                        <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'register' ? 'active' : ''; ?>">
-                            <a href="register.php" class="nav-link fas fa-registered"> Đăng kí</a>
-                        </li>
-                <?php else : ?>
                 <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'information' ? 'active' : ''; ?>">
-                    <a href="information.php?id=<?php echo $currentUser['id']; ?>" class=" nav-link fas fa-user"> Trang cá nhân</a>
+                    <a href="information.php?id=<?php echo $currentUser['id']; ?>" class=" nav-link fas fa-user"> Trang
+                        cá nhân</a>
                 </li>
             </ul>
 
             <!-- SEARCH FORM -->
             <form class="form-inline ml-3">
                 <div class="input-group input-group-sm">
-                    <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                    <input class="form-control form-control-navbar" type="search" placeholder="Search"
+                        aria-label="Search">
                     <div class="input-group-append">
                         <button class="btn btn-navbar" type="submit">
                             <i class="fas fa-search"></i>
@@ -73,7 +76,8 @@
                         <a href="#" class="dropdown-item">
                             <!-- Message Start -->
                             <div class="media">
-                                <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($currentUser['profilePicture']); ?>" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                                <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($currentUser['profilePicture']); ?>"
+                                    alt="User Avatar" class="img-size-50 mr-3 img-circle">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
                                         Brad Diesel
@@ -89,7 +93,8 @@
                         <a href="#" class="dropdown-item">
                             <!-- Message Start -->
                             <div class="media">
-                                <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($currentUser['profilePicture']); ?>" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($currentUser['profilePicture']); ?>"
+                                    alt="User Avatar" class="img-size-50 img-circle mr-3">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
                                         John Pierce
@@ -105,11 +110,13 @@
                         <a href="#" class="dropdown-item">
                             <!-- Message Start -->
                             <div class="media">
-                                <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($currentUser['profilePicture']); ?>" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($currentUser['profilePicture']); ?>"
+                                    alt="User Avatar" class="img-size-50 img-circle mr-3">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
                                         Nora Silvester
-                                        <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                                        <span class="float-right text-sm text-warning"><i
+                                                class="fas fa-star"></i></span>
                                     </h3>
                                     <p class="text-sm">The subject goes here</p>
                                     <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
@@ -150,15 +157,20 @@
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown"><img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($currentUser['profilePicture']); ?>" class="img-circle" alt="Avatar" width="25" height="25"> 
-                    <?php echo $currentUser['firstname'] .' '. $currentUser['lastname']; ?>
+                    <a class="nav-link" data-toggle="dropdown"><img
+                            src="<?php echo 'data:image/jpeg;base64,' . base64_encode($currentUser['profilePicture']); ?>"
+                            class="img-circle" alt="Avatar" width="25" height="25">
+                        <?php echo $currentUser['firstname'] .' '. $currentUser['lastname']; ?>
                         <span><?php $currentUser['firstname'].''.$currentUser['lastname'] ;?></span></a>
                     <ul class=" dropdown-menu  dropdown-menu-right">
-                        <li><a href="information.php?id=<?php echo $currentUser['id']; ?>"><i class="fas fa-user-tie"></i> <span>Trang cá nhân</span></a></li>
-                        <li><a href="changePassword.php"><i class="fas fa-exchange-alt"></i> <span>Đổi mật khẩu</span></a></li>
-                        <li><a href="updateProfile.php"><i class="fas fa-user-edit"></i> <span>Đổi thông tin cá nhân</span></a></li>
+                        <li><a href="information.php?id=<?php echo $currentUser['id']; ?>"><i
+                                    class="fas fa-user-tie"></i> <span>Trang cá nhân</span></a></li>
+                        <li><a href="changePassword.php"><i class="fas fa-exchange-alt"></i> <span>Đổi mật
+                                    khẩu</span></a></li>
+                        <li><a href="updateProfile.php"><i class="fas fa-user-edit"></i> <span>Đổi thông tin cá
+                                    nhân</span></a></li>
                         <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span></a></li>
-                    <?php endif; ?>
+                        <?php endif; ?>
 
                     </ul>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
@@ -179,5 +191,5 @@
             </ul>
         </nav>
         <!-- /.navbar -->
-    <!-- ========================== -->
-    <!-- <div class="container-fluid-bd"> -->
+        <!-- ========================== -->
+        <!-- <div class="container-fluid-bd"> -->

@@ -39,7 +39,7 @@ $friends = getFriends($users['id']);
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3"  >
 
                     <!-- Profile Image -->
                     <div class="card card-primary card-outline">
@@ -260,8 +260,8 @@ $friends = getFriends($users['id']);
                                             <?php foreach ($friends as $friend) : ?>
                                             <?php ?>
                                             <li>
-                                                <a
-                                                    href="information.php?id=<?php echo $friend['id']; ?>"><?php echo $friend['firstname'].' '.$friend['lastname']; ?></a>
+                                                <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($friend['profilePicture']); ?>" class="img-circle" alt="Avatar" width="25" height="25">
+                                                <a href="information.php?id=<?php echo $friend['id']; ?>"><?php echo $friend['firstname'].' '.$friend['lastname']; ?></a>  
                                             </li>
                                             <?php endforeach; ?>
                                         </ul>
