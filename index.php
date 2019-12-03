@@ -62,6 +62,7 @@ if ($start < 0) {
                         <?php foreach ($friends as $friend) : ?>
                         <?php if($currentUser['id'] != $friend['id']) { ?>
                         <li>
+                        <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($friend['profilePicture']); ?>" class="img-circle" alt="Avatar" width="25" height="25">
                             <a href="information.php?id=<?php echo $friend['id']; ?>"><?php echo $friend['firstname'].' '.$friend['lastname']; ?></a>
                         </li>
                         <?php }?>
@@ -198,7 +199,7 @@ if ($start < 0) {
             </ul>
     </div>
     <?php else : ?>
-    <h1>Chào mừng bạn đã đến với trang web.</h1>
+    <?php header("Location: login.php")?>
     <?php endif; ?>
 </div>
 </div>

@@ -17,7 +17,7 @@ if ($currentUser) {
         </div>
         <div class="hold-transition register-page  pull-right col-sm-5">
             <div class="register-box">
-            <?php
+                <?php
                 if (isset($_POST['registers'])) {
                     $f_name   = $_POST['f-name'];
                     $l_name   = $_POST['l-name'];
@@ -73,31 +73,22 @@ if ($currentUser) {
                 <?php
                                                 }
                                             } else {
-                                                if (strlen(trim($phonenumber)) > 10 || strlen(trim($phonenumber)) < 10 || !is_numeric($phonenumber)) {
-                                                    ?>
-                <div class="alert alert-warning alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
-                    Số điện thoại không hợp lệ!
-                </div>
-                <?php
-                                                } else {
-                                                    $newUserID = createUser($f_name, $l_name, $email, $username, $password, '', $birthday, $phonenumber);
+                                        
+                                $newUserID = createUser($f_name, $l_name, $email, $username, $password, '', $birthday, $phonenumber);
                                 ?>
                 <div class="alert alert-success alert-dismissible">
-                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                  <h5><i class="icon fas fa-check"></i> Thành công!</h5>
-                  Đăng kí thành công. Kiểm tra email để kích hoạt tài khoản!
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h5><i class="icon fas fa-check"></i> Thành công!</h5>
+                    Đăng kí thành công. Kiểm tra email để kích hoạt tài khoản!
                 </div>
                 <?php
                                 }
                             }
                         }
                     }
-                }
             ?>
                 <div class="register-logo">
-                    <a ><b>Đăng kí tài khoản mới</a>
+                    <a><b>Đăng kí tài khoản mới</a>
                 </div>
 
                 <div class="card">
@@ -105,7 +96,7 @@ if ($currentUser) {
                         <p class="login-box-msg">Hãy đăng kí vì nó miễn phí</p>
                         <form action="register.php" method="POST">
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Họ"  name="f-name">
+                                <input type="text" class="form-control" placeholder="Họ" name="f-name">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
@@ -113,7 +104,7 @@ if ($currentUser) {
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Tên"  name="l-name">
+                                <input type="text" class="form-control" placeholder="Tên" name="l-name">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
@@ -121,7 +112,9 @@ if ($currentUser) {
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <input type="date" class="form-control"  name="b-date">
+                                <input type="text" class="form-control" name="b-date"
+                                    value="<?php echo $currentUser['Birthday']; ?>" data-inputmask-alias="datetime"
+                                    data-inputmask-inputformat="dd/mm/yyyy" data-mask>
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-birthday-cake"></span>
@@ -129,7 +122,8 @@ if ($currentUser) {
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Số điện thoại" name="phoneNumber">
+                                <input type="text" class="form-control" placeholder="Số điện thoại" name="phoneNumber"
+                                    data-inputmask='"mask": "9999-999-999"' data-mask>
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-phone-alt"></span>
@@ -145,7 +139,7 @@ if ($currentUser) {
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <input type="email" class="form-control" placeholder="Email"  name="email">
+                                <input type="email" class="form-control" placeholder="Email" name="email">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-envelope"></span>
@@ -153,7 +147,7 @@ if ($currentUser) {
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <input type="password" class="form-control" placeholder="Mật khẩu"  name="password">
+                                <input type="password" class="form-control" placeholder="Mật khẩu" name="password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-lock"></span>
@@ -171,7 +165,8 @@ if ($currentUser) {
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-4">
-                                    <input type="submit" name="registers" value="Đăng kí" class="btn btn-primary btn-block" />
+                                    <input type="submit" name="registers" value="Đăng kí"
+                                        class="btn btn-primary btn-block" />
                                 </div>
                                 <!-- /.col -->
                             </div>
