@@ -312,3 +312,37 @@ function getNewFeedsForUserId($userId,$start,$limit) {
 //         $followings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 //         return $followings;
 // }
+
+//Lấy tin nhắn gần đây nhất 
+function getLatestConversations($userId) {
+        global $db;
+        $stmt = $db->prepare("SELECT UserID2 AS id, u.firstname,u.lastname, u.profilePicture FROM messages AS m LEFT JOIN user_accounts AS u ON u.id = m.UserID2 WHERE UserID1 = ? GROUP BY UserID2 ORDER BY CreateTime DESC");
+        $stmt->execute(array($userId));
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        for ($i = 0; $i < count($result); $i++) {
+          $stmt = $db->prepare("SELECT * FROM messages WHERE UserID1 = ? AND UserID2 = ? ORDER BY CreateTime DESC LIMIT 1");
+          $stmt->execute(array($userId, $result[$i]['id']));
+          $lastMessage = $stmt->fetch(PDO::FETCH_ASSOC);
+          $result[$i]['lastMessage'] = $lastMessage;
+        }
+        return $result;
+}
+//Gửi tin nhắn
+function sendMessage($userId1, $userId2, $content) {
+        global $db;
+        $stmt = $db->prepare("INSERT INTO messages (UserID1,UserID2,Content,Type, CreateTime) VALUE (?, ?, ?, ?, CURRENT_TIMESTAMP())");
+        $stmt->execute(array($userId1, $userId2, $content, 0));
+        $id = $db->lastInsertId();
+        $stmt = $db->prepare("SELECT * FROM messages WHERE ID = ?");
+        $stmt->execute(array($id));
+        $newMessage = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt = $db->prepare("INSERT INTO messages (UserID2, UserID1,Content, Type, CreateTime) VALUE (?, ?, ?, ?, ?)");
+        $stmt->execute(array($userId1, $userId2, $content, 1, $newMessage['CreateTime']));
+}
+//Lấy tin nhắn
+function getMessagesWithUserId($userId1, $userId2) {
+        global $db;
+        $stmt = $db->prepare("SELECT * FROM messages WHERE UserID1 = ? AND UserID2= ? ORDER BY CreateTime");
+        $stmt->execute(array($userId1, $userId2));
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
