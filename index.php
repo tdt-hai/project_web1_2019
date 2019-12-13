@@ -38,16 +38,14 @@ if ($start < 0) {
     $start = 0;
 }
 ?>
-<?php 
-    try
-    {
+<?php
+ try{
         $posts = getNewFeedsForUserId($currentUser['id'],$start, $limit); 
-    }
-       
-    catch(Exception $e)
-    {
-    }
-        
+        }
+
+        catch(Exception $e)
+        {
+        }            
 ?>
 <?php if ($currentUser) : ?>
 <div class="row">
@@ -129,8 +127,7 @@ if ($start < 0) {
                                                     <?php if ($post['id'] == $currentUser['id']){?>
                                                     <button type="submit" name="delete"
                                                         value="<?php echo $post['postID'] ?>"
-                                                        class="float-right btn-tool"><i
-                                                            class="fas fa-times"></i></button>
+                                                        class="float-right btn-tool"><i class="fas fa-trash-alt"></i></button>
                                                     <?php }?>
                                                 </span>
                                                 <span class="description">Đăng lúc:

@@ -29,8 +29,8 @@ if ($currentUser) {
                             ?>
                     <div class="alert alert-danger alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h5><i class="icon fas fa-ban"></i> Nguy hiểm!</h5>
-                    Tài khoản không tồn tại
+                    <h5><i class="icon fas fa-ban"></i> Tài khoản không tồn tại</h5>
+                    
                     </div>
                     <?php
                         } else {
@@ -38,8 +38,8 @@ if ($currentUser) {
                             {   ?>
                     <div class="alert alert-warning alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
-                    Không được bỏ trống
+                    <h5><i class="icon fas fa-exclamation-triangle"></i> Không được bỏ trống </h5>
+                    
                     </div>
                     <?php
                             }
@@ -48,8 +48,8 @@ if ($currentUser) {
                                 ?>
                     <div class="alert alert-warning alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
-                    Mật khẩu không chính xác!
+                    <h5><i class="icon fas fa-exclamation-triangle"></i> Mật khẩu không chính xác!</h5>
+                    
                     </div>
                     <?php
                             } 
@@ -60,8 +60,8 @@ if ($currentUser) {
                                     ?>
                     <div class="alert alert-warning alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
-                    Tài khoản chưa được kích hoạt! Vui lòng kiểm tra lại email để kích hoạt tài khoản!
+                    <h5><i class="icon fas fa-exclamation-triangle"></i> Tài khoản chưa được kích hoạt! Vui lòng kiểm tra lại email để kích hoạt tài khoản!</h5>
+                    
                     </div>
                     <?php
                                 } 
@@ -119,7 +119,7 @@ if ($currentUser) {
                             </div>
                         </form>
                         <p class="mb-1">
-                            <a href="findAccount.php">Tôi quên mật khẩu</a>
+                            <a href="findAccount.php">Quên mật khẩu?</a>
                         </p>
                         <p class="mb-0">
                             <a href="register.php" class="text-center">Tôi chưa có tài khoản</a>

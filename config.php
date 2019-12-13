@@ -14,9 +14,9 @@ $DB_PASS = '';
 // $DB_PASS = '123456778';
 
 // Email config
-$EMAIL_FROM = 'thanhhai30091999@gmail.com';
-$EMAIL_NAME = 'ThanhHai';
-$EMAIL_PASSWORD = 'Tdth13158';
+$EMAIL_FROM = 'ltweb1.2019@gmail.com';
+$EMAIL_NAME = 'HHN';
+$EMAIL_PASSWORD = 'ABCxyz123@';
 
 
 // Url config
