@@ -12,7 +12,7 @@ if (isset($_POST['send'])) {
     <!-- DIRECT CHAT PRIMARY -->
     <div class="card card-prirary cardutline direct-chat direct-chat-primary">
         <div class="card-header">
-            <h3 class="card-title"><?php echo $user['firstname'].''.$user['lastname']  ?></h3>
+           <h3 class="card-title">&ensp;<?php echo $user['firstname'].''.$user['lastname']  ?></h3>
             <div class="card-tools">
                 <!-- <span data-toggle="tooltip" title="3 New Messages" class="badge bg-primary">3</span>
                   <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>

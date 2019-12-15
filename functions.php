@@ -346,3 +346,18 @@ function getMessagesWithUserId($userId1, $userId2) {
         $stmt->execute(array($userId1, $userId2));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+function createComments($postID,$userID,$content)
+{
+        global $db;
+        $command = "INSERT INTO `comments` (Content,UserID,PostID) VALUES (?, ?,?)";
+        $stmt    = $db->prepare($command);
+        $stmt->execute(array($content, $userID,$postID));
+        return $db->lastInsertId();
+}
+function showComment($idPost)
+{
+        global $db;
+        $stmt = $db->prepare("SELECT uc.firstname,uc.lastname,uc.profilePicture,cmt.PostID,cmt.Content,cmt.CreateTime FROM `user_posts` up, comments cmt, user_accounts uc Where cmt.PostID= ? and up.PostID=cmt.PostID and uc.id=cmt.UserID order by CreateTime DESC");
+        $stmt->execute(array($idPost));
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
