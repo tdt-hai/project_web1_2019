@@ -4,7 +4,7 @@ $dbUrl = '';
 // Connect to Database in LOCALHOST
 $DB_HOST = 'localhost';
 $DB_USER = 'root';
-$DB_NAME = 'ql_data';
+$DB_NAME = 'ql_mxh';
 $DB_PASS = '';
 
 // In web server
