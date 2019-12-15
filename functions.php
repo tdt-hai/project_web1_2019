@@ -58,7 +58,7 @@ function createUser($f_name, $l_name, $email, $username, $passsword, $profilePic
         $stmt->execute(array($f_name, $l_name, $email, $username, $hashPass, 0, $activationCode, $profilePicture, $birthday, $phonenumber));
         $newAccount = $db->lastInsertId();
         // Send mail
-        //die();
+        die();
         sendMail(
                 $email,
                 $l_name,
@@ -138,18 +138,18 @@ function getNewsFeed($start, $limit)
 }
 
 /// Add new post
-function createPost($userID, $content)
+function createPost($userID, $content,$privacy,$image)
 {
         global $db;
-        $command = "INSERT INTO `user_posts` (content, id) VALUES (?, ?)";
+        $command = "INSERT INTO `user_posts` (image,privacy,content, id) VALUES (?, ? ,? ,?)";
         $stmt    = $db->prepare($command);
-        $stmt->execute(array($content, $userID));
+        $stmt->execute(array($image,$privacy,$content, $userID));
         return $db->lastInsertId();
 }
 function showPost($id)
 {
         global $db;
-        $stmt = $db->prepare("SELECT us.postID, uc.profilePicture,uc.firstname,uc.lastname,us.post_time,us.content FROM `user_posts` us, user_accounts uc Where us.id= ?
+        $stmt = $db->prepare("SELECT us.postID, uc.profilePicture,uc.firstname,uc.lastname,us.post_time,us.content,us.privacy FROM `user_posts` us, user_accounts uc Where us.id= ?
                                 and us.id=uc.id order by `post_time` DESC");
         $stmt->execute(array($id));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -246,11 +246,44 @@ function findrelationship($userid1, $userid2)
         $stmt->execute(array($userid1, $userid2, $userid2, $userid1));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+//sendMail friend
+function sendMail_Friend($from,$fromName,$to, $toName, $subject, $content)
+{
+        global $EMAIL_FROM, $EMAIL_NAME, $EMAIL_PASSWORD;
+        // Instantiation and passing `true` enables exceptions
+        $mail = new PHPMailer(true);
+
+        //Server settings
+        $mail->isSMTP(); // Send using SMTP
+
+        $mail->CharSet    = 'UTF-8';
+        $mail->Host       = 'smtp.gmail.com'; // Set the SMTP server to send through
+        $mail->SMTPAuth   = true; // Enable SMTP authentication
+        $mail->Username   = $EMAIL_FROM; // SMTP username
+        $mail->Password   = $EMAIL_PASSWORD; // SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+        $mail->Port       = 587; // TCP port to connect to
+
+        //Recipients
+        $mail->setFrom($EMAIL_FROM, $EMAIL_NAME);
+        $mail->addAddress($to, $toName); // Add a recipient
+
+        // Content
+        $mail->isHTML(true); // Set email format to HTML
+        $mail->Subject = $subject;
+        $mail->Body    = $content;
+        //  $mail->AltBody = $content;
+
+        $mail->send();
+        return true;
+}
 function Send_Accept_FriendRequest($userid1, $userid2)
 {
         global $db;
         $stmt = $db->prepare("INSERT INTO friends(UserID_1,UserID_2) VALUES(?, ?)");
-        $stmt->execute(array($userid1, $userid2));
+        $newAccount = $stmt->execute(array($userid1, $userid2));
+        // sendMail_Friend($email,$l_name,'Confirm email',"Your activation code is:<a href=\"$BASE_URL/confirmEmail.php?activationCode=$activationCode\">$BASE_URL/confirmEmail.php?activationCode=$activationCode</a>");
+        return $newAccount;
 }
 function cancel_delete_FriendRequest($userid1, $userid2)
 {
@@ -361,3 +394,52 @@ function showComment($idPost)
         $stmt->execute(array($idPost));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+/////LIKE
+function Likes($postID, $userID)
+{
+        global $db;
+        $stmt = $db->prepare("INSERT INTO postlikes(PostID,UserID) VALUES(?, ?)");
+        $newAccount = $stmt->execute(array($postID, $userID)); 
+        return $newAccount;
+}
+function Unlikes($postID, $userID)
+{
+        global $db;
+        $stmt = $db->prepare("DELETE FROM postlikes WHERE  PostID = ? AND UserID = ?");
+        $stmt->execute(array($postID,$userID));
+}
+function findlikeforUserID($postID,$userID)
+{
+        global $db;
+        $stmt = $db->prepare("SELECT * FROM postlikes WHERE PostID = ? and UserID = ?");
+        $stmt->execute(array($postID,$userID));
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+function findlikePost($postID)
+{
+        global $db;
+        $stmt = $db->prepare("SELECT * FROM postlikes WHERE PostID = ?");
+        $stmt->execute(array($postID));
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+function updatePublic($postID){
+        global $db;
+        $command  = "UPDATE `user_posts` SET `privacy`= 0 WHERE `postID` = ?";
+        $stmt     = $db->prepare($command);
+        return $stmt->execute(array($postID));
+}
+function updateFriend($postID){
+        global $db;
+        $command  = "UPDATE `user_posts` SET `privacy`= 1 WHERE `postID` = ?";
+        $stmt     = $db->prepare($command);
+        return $stmt->execute(array($postID));
+}
+function updatePrivate($postID){
+        global $db;
+        $command  = "UPDATE `user_posts` SET `privacy`= 2 WHERE `postID` = ?";
+        $stmt     = $db->prepare($command);
+        return $stmt->execute(array($postID));
+}
+
+
+

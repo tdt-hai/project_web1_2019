@@ -3,7 +3,6 @@ require_once 'init.php';
  ob_start();
 ?>
 <?php include 'header.php'; ?>
-<!-- <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'> -->
 <link rel="stylesheet" type="text/css" href="./css_files/style_page.css">
 <?php
 $success = true;
@@ -16,6 +15,12 @@ if (isset($_POST['Posts'])) {
         createPost($currentUser['id'], $content);
         header('Location: index.php');
     }
+}
+if(isset($_POST['commentts'])){
+    $comments = $_POST['comment'];
+    $post_ID = $_POST['commentts'];
+    createComments($post_ID,$currentUser['id'],$comments);
+    header('Location: index.php');
 }
 //Xử lí phân trang
 // BƯỚC 2: TÌM TỔNG SỐ RECORDS
@@ -58,12 +63,14 @@ if ($start < 0) {
                     <h4>Gợi ý kết bạn</h4>
                     <ul>
                         <?php $friends= getSuggestionFriend() ?>
-  
+
                         <?php foreach ($friends as $friend) : ?>
                         <?php if($currentUser['id'] != $friend['id']) { ?>
                         <li>
-                        <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($friend['profilePicture']); ?>" class="img-circle" alt="Avatar" width="25" height="25">
-                            <a href="information.php?id=<?php echo $friend['id']; ?>"><?php echo $friend['firstname'].' '.$friend['lastname']; ?></a>
+                            <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($friend['profilePicture']); ?>"
+                                class="img-circle" alt="Avatar" width="25" height="25">
+                            <a
+                                href="information.php?id=<?php echo $friend['id']; ?>"><?php echo $friend['firstname'].' '.$friend['lastname']; ?></a>
                         </li>
                         <?php }?>
                         <?php endforeach; ?>
@@ -90,6 +97,30 @@ if ($start < 0) {
                                         </div>
                                     </form>
                                 </div>
+                                <ul class="pagination modal-1">
+                                    <?php if ($current_page > 1 && $total_page > 1) {
+                                ?>
+                                    <li><a href="index.php?page=<?php echo ($current_page - 1); ?>"
+                                            class="prev">&laquo</a></li>
+                                    <?php } ?>
+
+                                    <?php for ($i = 1; $i <= $total_page; $i++) {
+                                if ($i == $current_page) {
+                                    ?>
+                                    <li><a href="index.php?page= <?php echo $i; ?>" class="active"><?php echo $i ?></a>
+                                    </li>
+                                    <?php
+                                } else {
+                                    echo '<a href="index.php?page=' . $i . '">' . $i . '</a>';
+                                }
+                            }
+                            ?>
+                                    <?php if ($current_page < $total_page && $total_page > 1) {
+                                ?>
+                                    <li><a href="index.php?page=<?php echo ($current_page + 1); ?>"
+                                            class="next">&raquo;</a></li>
+                                    <?php } ?>
+                                </ul>
                             </div>
                             <?php if (!$success) : ?>
                             <div class="alert alert-danger" role="alert">
@@ -111,14 +142,6 @@ if ($start < 0) {
                                                 <span class="username">
                                                     <a href="#" class="dropdown-toggle"
                                                         data-toggle="dropdown"><?php echo $post['firstname'] . ' ' . $post['lastname']; ?></a>
-                                                    <ul class="dropdown-menu">
-                                                        <li><a href="#"><i class="fas fa-globe-americas"></i>
-                                                                <span>public</span></a></li>
-                                                        <li><a href="#"><i class="fas fa-user-friends"></i>
-                                                                <span>Friend</span></a></li>
-                                                        <li><a href="#"><i class="fas fa-lock"></i>
-                                                                <span>private</span></a></li>
-                                                    </ul>
                                                     <?php
                                                                             if (isset($_POST['delete'])) {
                                                                                 $value = $_POST['delete'];
@@ -140,67 +163,58 @@ if ($start < 0) {
                                             <p>
                                                 <?php echo $post['content']; ?>
                                             </p>
+                                    </form>
+                                    <p>
+                                        <a href="#" class="link-black text-sm mr-2"><i
+                                                class="far fa-thumbs-up mr-1"></i>Thích</a>
+                                        <a href="#" class="link-black text-sm mr-2"><i class="far fa-thumbs-down"></i>
+                                            Không thích</a>
+                                        <a href="#" class="link-black text-sm"><i class="fas fa-share mr-1"></i>
+                                            Chia sẻ</a>
+                                        <span class="float-right">
+                                            <a href="#" class="link-black text-sm">
+                                                <i class="far fa-comments mr-1"></i> Bình luận
+                                                (<?php $showComments = showComment($post['postID']); echo count($showComments); ?>)
+                                            </a>
+                                        </span>
+                                    </p>
 
-                                            <p>
-                                                <a href="#" class="link-black text-sm mr-2"><i
-                                                        class="far fa-thumbs-up mr-1"></i>Thích</a>
-                                                <a href="#" class="link-black text-sm"><i class="fas fa-share mr-1"></i>
-                                                    Chia sẻ</a>
-                                                <span class="float-right">
-                                                    <a href="#" class="link-black text-sm">
-                                                        <i class="far fa-comments mr-1"></i> Bình luận (5)
-                                                    </a>
-                                                </span>
-                                            </p>
-
-                                            <form class="form-horizontal">
-                                                <div class="input-group input-group-sm mb-0">
-                                                    <input class="form-control form-control-sm" placeholder="comment">
-                                                    <div class="input-group-append">
-                                                        <button type="submit" class="btn btn-danger">Gửi</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-
+                                    <form method="POST" class="form-horizontal">
+                                        <div class="input-group input-group-sm mb-0">
+                                            <textarea class="form-control form-control-sm" name="comment" cols="30"
+                                                rows="2" placeholder="Viết bình luận..."></textarea>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="submit" name="commentts"
+                                                    value="<?php echo $post['postID'] ?>">Bình luận</button>
+                                            </div>
                                         </div>
                                     </form>
-                                </div>
-                                <!-- /.post -->
-                            </div>
-                        </div>
-                        <?php endforeach; ?>
-                        <!-- /.tab-pane -->
-                    </div>
-                    <!-- /.tab-content -->
-                </div><!-- /.card-body -->
-            </div>
-            <!-- /.nav-tabs-custom -->
-            <!-- Hiển thị phân trang -->
-            <ul class="pagination modal-1">
-                <?php if ($current_page > 1 && $total_page > 1) {
-                                ?>
-                <li><a href="index.php?page=<?php echo ($current_page - 1); ?>" class="prev">&laquo</a></li>
-                <?php } ?>
+                                    <?php  foreach($showComments as $showComment):  ?>
+                                    <a class="nav-link" data-toggle="dropdown"><img
+                                            src="<?php echo 'data:image/jpeg;base64,' . base64_encode($showComment['profilePicture']); ?>"
+                                            class="img-circle" alt="Avatar" width="25" height="25">
+                                        <?php echo $showComment['firstname'] .' '. $showComment['lastname']; ?></a>
+                                    <h5><?php echo $showComment['Content']; ?></h5>
+                                    <?php endforeach; ?>
 
-                <?php for ($i = 1; $i <= $total_page; $i++) {
-                                if ($i == $current_page) {
-                                    ?>
-                <li><a href="index.php?page= <?php echo $i; ?>" class="active"><?php echo $i ?></a></li>
-                <?php
-                                } else {
-                                    echo '<a href="index.php?page=' . $i . '">' . $i . '</a>';
-                                }
-                            }
-                            ?>
-                <?php if ($current_page < $total_page && $total_page > 1) {
-                                ?>
-                <li><a href="index.php?page=<?php echo ($current_page + 1); ?>" class="next">&raquo;</a></li>
-                <?php } ?>
-            </ul>
+                                </div>
+                            </div>
+                            <!-- /.post -->
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                    <!-- /.tab-pane -->
+                </div>
+                <!-- /.tab-content -->
+            </div><!-- /.card-body -->
     </div>
-    <?php else : ?>
-    <?php header("Location: login.php")?>
-    <?php endif; ?>
+    <!-- /.nav-tabs-custom -->
+    <!-- Hiển thị phân trang -->
+
+</div>
+<?php else : ?>
+<?php header("Location: login.php")?>
+<?php endif; ?>
 </div>
 </div>
 <?php ob_end_flush(); ?>
