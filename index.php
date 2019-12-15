@@ -199,8 +199,8 @@ if ($start < 0) {
             </ul>
     </div>
     <?php else : ?>
-
-    <?php header("Location: login.php")?>
+        <?php header("Location: login.php")?>
+    <?php endif; ?>
 </div>
 </div>
 <?php ob_end_flush(); ?>

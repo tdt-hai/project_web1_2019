@@ -18,23 +18,30 @@ if (count($relationship) === 1) {
 ?>
 <?php
 $success = true;
+// $imagetmp ; 
 //CreatePost
+if ("POST" == $_SERVER["REQUEST_METHOD"]) {
+
+    if(isset($_POST['UploadPicture'])){
+        $fileName = $_FILES['UploadPicture']['name'];
+        $filetmp  = $_FILES['UploadPicture']['tmp_name'];
+        var_dump("test");
+       // $imagetmp = file_get_contents($fileTmp);}
+       // $imagetmp = addslashes(file_get_contents($filetmp));}
+       $imagetmp = file_get_contents($filetmp);
+}
 if (isset($_POST['Posts'])) {
     $content = $_POST['content'];
     $lengh = strlen($content);
     if ($lengh == 0 || $lengh > 1024) {
         $success = false;
-    } if($success && !$imagetmp ) {
-        createPost($users['id'], $content);
-        header('Location:information.php?id='.$currentUser['id']);
-        
-    }
-    if($success && $imagetmp)
-    {
-        uploadImageOnTimeline($user['id'],$content,$imagetmp);
+    } else {
+        createPost($users['id'], $content,$imagetmp);
         header('Location:information.php?id='.$currentUser['id']);
     }
 }
+}
+
 $friends = getFriends($users['id']);
 if(isset($_POST['commentts'])){
     $comments = $_POST['comment'];
@@ -154,7 +161,7 @@ if(isset($_POST['commentts'])){
                                     <?php if($currentUser['id'] == $users['id'] ) { ?>
                                     <div class="panel panel-default">
                                         <div class="panel-body">
-                                            <form method="POST" >
+                                            <form method="POST" enctype="multipart/form-data" action ="information.php?id=<?php echo $currentUser['id']; ?>" >
                                                 <div class="form-group">
                                                     
                                                     <style>
@@ -190,10 +197,10 @@ if(isset($_POST['commentts'])){
 
                                                     <!-- <button type = "buttton" name = "insertPicture"  > <i class="fas fa-images"></i>
                                                     </button>    -->
-                                                    <style>
-                                                     
-                                                    </style>
-                                                    <script>
+                                                    <!-- <style>
+                                                      
+                                                    </style> -->
+                                                    <!-- <script>
                                                         function readURL(input) {
                                                             if (input.files && input.files[0]) {
                                                                 var reader = new FileReader();
@@ -209,25 +216,19 @@ if(isset($_POST['commentts'])){
                                                                 reader.readAsDataURL(input.files[0]);
                                                             }
                                                         }
-                                                    </script>
-                                                        <span>Ảnh  <i class="fas fa-images"></i>
-                                                                        </span>
-                                                                        <!-- onchange ="readURL(this);"                -->
-                                                        <input name="UploadImage" id = "UploadImage"  type="file" accept = "image/jpeg" onchange ="readURL(this);"  />
+                                                    </script> -->
+
+                                                           
+                                                            <!-- <input type = "file" name = "UploadImage" />   
+                                                          <input name="submitPicture" id = "submitPicture"  accept = "image/jpeg"   /> -->
+                                                          <input type="file" id = "UploadPicture" name="UploadPicture" />
                                                     </div>
                                                    
                                                         
-                                                 <img id="blah"  class = "imgPreview" src="#" alt="" />
+                                                 <!-- <img id="blah"  class = "imgPreview" src="#" alt="" /> -->
+
                                                 </div>
-                                                <?php 
-                                                    var_dump("test");
-                                                    if (isset($_FILES['UploadImage'])) {
-                                                        $fileName = $_FILES['UploadImage']['name'];
-                                                        $fileTmp  = $_FILES['UploadImage']['tmp_name'];
-                                                        var_dump("test");
-                                                        $imagetmp = file_get_contents($fileTmp);
-                                                    }
-                                                ?>
+                                             
                                                    
 
                                                 <div class="form-group">
@@ -289,6 +290,8 @@ if(isset($_POST['commentts'])){
                                                     <!-- /.user-block -->
                                                     <p>
                                                         <?php echo $post['content']; ?>
+                                                        <img  src="<?php echo 'data:image/jpeg;base64,' . base64_encode($post['Picture']); ?>"
+                                                            alt="user image">
                                                     </p>
                                             </form>
                                                     <p>

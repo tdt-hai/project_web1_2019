@@ -146,18 +146,18 @@ function getNewsFeed($start, $limit)
 }
 
 /// Add new post
-function createPost($userID, $content)
+function createPost($userID, $content, $pic)
 {
         global $db;
-        $command = "INSERT INTO `user_posts` (content, id) VALUES (?, ?)";
+        $command = "INSERT INTO `user_posts` (content, id,picture) VALUES (?, ?,?)";
         $stmt    = $db->prepare($command);
-        $stmt->execute(array($content, $userID));
+        $stmt->execute(array($content, $userID,$pic));
         return $db->lastInsertId();
 }
 function showPost($id)
 {
         global $db;
-        $stmt = $db->prepare("SELECT us.postID, uc.profilePicture,uc.firstname,uc.lastname,us.post_time,us.content FROM `user_posts` us, user_accounts uc Where us.id= ?
+        $stmt = $db->prepare("SELECT us.Picture, us.postID, uc.profilePicture,uc.firstname,uc.lastname,us.post_time,us.content FROM `user_posts` us, user_accounts uc Where us.id= ?
                                 and us.id=uc.id order by `post_time` DESC");
         $stmt->execute(array($id));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
