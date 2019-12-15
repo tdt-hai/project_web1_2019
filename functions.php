@@ -301,3 +301,78 @@ function getSuggestionFriend() {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+//hàm newfeed khi đã là friend
+function getNewFeedsForUserId($userId,$start,$limit) {
+        global $db;
+        $friends = getFriends($userId);
+        $friendIds = array();
+        foreach ($friends as $friend) {
+          $friendIds[] = $friend['id'];
+        }
+        $friendIds[] = $userId;
+        $stmt = $db->prepare("SELECT p.postID, p.id, u.firstname ,u.lastname, u.profilePicture, p.content, p.post_time FROM user_posts as p LEFT JOIN user_accounts as u ON u.id = p.id WHERE p.id IN (" . implode(',', $friendIds) .  ") ORDER BY post_time DESC LIMIT ?,?");
+        $stmt->bindParam(1, $start, PDO::PARAM_INT);
+        $stmt->bindParam(2, $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+// function banbe()
+// {
+//         global $db;
+//         $stmt = $db->prepare("SELECT * FROM user_accounts u WHERE u.id  NOT IN ( SELECT u.id 
+//                                                                                 FROM friends f ,user_accounts u 
+//                                                                                 WHERE (f.UserID_1 = u.id )OR( f.UserID_2 = u.id))");
+//         $stmt->execute();
+//         $followings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+//         return $followings;
+// }
+
+//Lấy tin nhắn gần đây nhất 
+function getLatestConversations($userId) {
+        global $db;
+        $stmt = $db->prepare("SELECT UserID2 AS id, u.firstname,u.lastname, u.profilePicture FROM messages AS m LEFT JOIN user_accounts AS u ON u.id = m.UserID2 WHERE UserID1 = ? GROUP BY UserID2 ORDER BY CreateTime DESC");
+        $stmt->execute(array($userId));
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        for ($i = 0; $i < count($result); $i++) {
+          $stmt = $db->prepare("SELECT * FROM messages WHERE UserID1 = ? AND UserID2 = ? ORDER BY CreateTime DESC LIMIT 1");
+          $stmt->execute(array($userId, $result[$i]['id']));
+          $lastMessage = $stmt->fetch(PDO::FETCH_ASSOC);
+          $result[$i]['lastMessage'] = $lastMessage;
+        }
+        return $result;
+}
+//Gửi tin nhắn
+function sendMessage($userId1, $userId2, $content) {
+        global $db;
+        $stmt = $db->prepare("INSERT INTO messages (UserID1,UserID2,Content,Type, CreateTime) VALUE (?, ?, ?, ?, CURRENT_TIMESTAMP())");
+        $stmt->execute(array($userId1, $userId2, $content, 0));
+        $id = $db->lastInsertId();
+        $stmt = $db->prepare("SELECT * FROM messages WHERE ID = ?");
+        $stmt->execute(array($id));
+        $newMessage = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt = $db->prepare("INSERT INTO messages (UserID2, UserID1,Content, Type, CreateTime) VALUE (?, ?, ?, ?, ?)");
+        $stmt->execute(array($userId1, $userId2, $content, 1, $newMessage['CreateTime']));
+}
+//Lấy tin nhắn
+function getMessagesWithUserId($userId1, $userId2) {
+        global $db;
+        $stmt = $db->prepare("SELECT * FROM messages WHERE UserID1 = ? AND UserID2= ? ORDER BY CreateTime");
+        $stmt->execute(array($userId1, $userId2));
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+function createComments($postID,$userID,$content)
+{
+        global $db;
+        $command = "INSERT INTO `comments` (Content,UserID,PostID) VALUES (?, ?,?)";
+        $stmt    = $db->prepare($command);
+        $stmt->execute(array($content, $userID,$postID));
+        return $db->lastInsertId();
+}
+function showComment($idPost)
+{
+        global $db;
+        $stmt = $db->prepare("SELECT uc.firstname,uc.lastname,uc.profilePicture,cmt.PostID,cmt.Content,cmt.CreateTime FROM `user_posts` up, comments cmt, user_accounts uc Where cmt.PostID= ? and up.PostID=cmt.PostID and uc.id=cmt.UserID order by CreateTime DESC");
+        $stmt->execute(array($idPost));
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
