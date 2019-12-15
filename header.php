@@ -33,9 +33,7 @@
     <nav class="navbar navbar-expand navbar-primary navbar-dark">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
-                <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'index' ? 'active' : ''; ?>">
-                    <a class="nav-link fa fa-home" href="index.php"> Trang chủ</a>
-                </li>
+                
                 <?php if (!$currentUser) : ?>
                         <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'login' ? 'active' : ''; ?>">
                             <a href="login.php" class=" nav-link fas fa-sign-in-alt"> Đăng nhập</a>
@@ -44,6 +42,9 @@
                             <a href="register.php" class="nav-link fas fa-registered"> Đăng kí</a>
                         </li>
                 <?php else : ?>
+                    <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'index' ? 'active' : ''; ?>">
+                    <a class="nav-link fa fa-home" href="index.php"> Trang chủ</a>
+                </li>
                 <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'information' ? 'active' : ''; ?>">
                     <a href="information.php?id=<?php echo $currentUser['id']; ?>" class=" nav-link fas fa-user"> Trang cá nhân</a>
                 </li>

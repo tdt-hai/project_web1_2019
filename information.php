@@ -148,7 +148,7 @@ $friends = getFriends($users['id']);
                                     <div class="panel panel-default">
                                         <div class="panel-body">
                                             <form method="POST"
-                                                action="information.php?id=<?php echo $users['id']; ?> ">
+                                                action="information.php?id=<?php echo $users['id'];  ?>  ">
                                                 <div class="form-group">
                                                     
                                                     <style>
@@ -204,19 +204,13 @@ $friends = getFriends($users['id']);
                                                             }
                                                         }
                                                     </script>
-                                                    <div class="choose_file">
                                                         <span>Ảnh  <i class="fas fa-images"></i>
                                                                         </span>
-                                                        <input name="UploadImage" id = "UploadImage"  type="file" accept = "image/jpeg" onchange ="readURL(this);" />
+                                                                        <!-- onchange ="readURL(this);"                -->
+                                                        <input name="UploadImage" id = "UploadImage"  type="file" accept = "image/jpeg" onchange ="readURL(this);"  />
                                                     </div>
                                                    
-                                                <?php
-                                                    if(isset($_FILES['UploadImage']))
-                                                    {
-                                                      $img = $_FILES['UploadImage']['name'];
-                                                      $imagetmp = file_get_contents($fileTmp);
-                                                        }
-                                                ?>
+                                                        
                                                  <img id="blah"  class = "imgPreview" src="#" alt="" />
                                                 </div>
                                                 <?php 
@@ -228,6 +222,8 @@ $friends = getFriends($users['id']);
                                                         $imagetmp = file_get_contents($fileTmp);
                                                     }
                                                 ?>
+                                                   
+
                                                 <div class="form-group">
                                                     <input class="btn btn-primary" type="submit" name="Posts"
                                                         value="Đăng">

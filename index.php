@@ -198,7 +198,7 @@ if ($start < 0) {
             </ul>
     </div>
     <?php else : ?>
-    <h1>Chào mừng bạn đã đến với trang web.</h1>
+    <?php header("Location: login.php")  ?>
     <?php endif; ?>
 </div>
 </div>
