@@ -20,15 +20,15 @@ if (count($relationship) === 1) {
 $success = true;
 // $imagetmp ; 
 //CreatePost
-if ("POST" == $_SERVER["REQUEST_METHOD"]) {
+//if ("POST" == $_SERVER["REQUEST_METHOD"]) {
 
-    if(isset($_POST['UploadPicture'])){
+if(isset($_FILES['UploadPicture'])){
         $fileName = $_FILES['UploadPicture']['name'];
         $filetmp  = $_FILES['UploadPicture']['tmp_name'];
-        var_dump("test");
        // $imagetmp = file_get_contents($fileTmp);}
        // $imagetmp = addslashes(file_get_contents($filetmp));}
        $imagetmp = file_get_contents($filetmp);
+      // header('Location:index.php');
 }
 if (isset($_POST['Posts'])) {
     $content = $_POST['content'];
@@ -40,7 +40,7 @@ if (isset($_POST['Posts'])) {
         header('Location:information.php?id='.$currentUser['id']);
     }
 }
-}
+//}
 
 $friends = getFriends($users['id']);
 if(isset($_POST['commentts'])){
@@ -191,6 +191,14 @@ if(isset($_POST['commentts'])){
                                                                     top:0; left:0;
                                                                     opacity:0; 
                                                                 }
+                                                        .imageShow{
+                                                            border-radius: 8px;
+                                                            object-fit: cover;
+                                                            max-width: 450px;
+                                                            max-height: 500px;  
+
+
+                                                        }
                                                     </style>
                                                     <textarea class="form-control" id="content" name="content"
                                                         placeholder="Bạn đang nghĩ gì..."></textarea>
@@ -200,7 +208,7 @@ if(isset($_POST['commentts'])){
                                                     <!-- <style>
                                                       
                                                     </style> -->
-                                                    <!-- <script>
+                                                    <script>
                                                         function readURL(input) {
                                                             if (input.files && input.files[0]) {
                                                                 var reader = new FileReader();
@@ -216,16 +224,19 @@ if(isset($_POST['commentts'])){
                                                                 reader.readAsDataURL(input.files[0]);
                                                             }
                                                         }
-                                                    </script> -->
+                                                    </script>
 
                                                            
                                                             <!-- <input type = "file" name = "UploadImage" />   
                                                           <input name="submitPicture" id = "submitPicture"  accept = "image/jpeg"   /> -->
-                                                          <input type="file" id = "UploadPicture" name="UploadPicture" />
+                                                          <!-- <input type="file" id = "UploadPicture" name="UploadPicture" accept="image/jpeg"  /><i class="fas fa-images"></i> -->
+                                                          <i class="fas fa-images"></i>  </span>
+                                                                        <!-- onchange ="readURL(this);"                -->
+                                                            <input name="UploadPicture" id = "UploadPicture"  type="file" accept = "image/jpeg" onchange ="readURL(this);"  />
                                                     </div>
                                                    
                                                         
-                                                 <!-- <img id="blah"  class = "imgPreview" src="#" alt="" /> -->
+                                                 <img id="blah"  class = "imgPreview" src="#" alt="" />
 
                                                 </div>
                                              
@@ -290,8 +301,13 @@ if(isset($_POST['commentts'])){
                                                     <!-- /.user-block -->
                                                     <p>
                                                         <?php echo $post['content']; ?>
+                                                    </p>
+                                                    <p>
+                                                        <?php if(!empty($post['Picture'])){?>
                                                         <img  src="<?php echo 'data:image/jpeg;base64,' . base64_encode($post['Picture']); ?>"
-                                                            alt="user image">
+                                                            alt="user image"class = "imageShow">
+                                                        <?php } ?>
+
                                                     </p>
                                             </form>
                                                     <p>
