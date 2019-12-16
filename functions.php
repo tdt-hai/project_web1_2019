@@ -47,7 +47,7 @@ function generateCode($length = 10)
 }
 
 // Create a user's account
-function createUser($f_name, $l_name, $email, $username, $passsword, $profilePicture, $birthday, $phonenumber)
+function createUser($f_name, $l_name, $email, $username, $passsword, $profilePicture, $birthday, $phonenumber, $education, $location, $skill, $notes)
 {
         global $db, $BASE_URL;
         $command = "INSERT INTO `user_accounts`(`firstname`, `lastname`, `email`, `username`, `password`, `confirmStatus`, `activationCode`,profilePicture,Birthday,phoneNumber,Education,Location,Skill,Notes)
@@ -55,7 +55,7 @@ function createUser($f_name, $l_name, $email, $username, $passsword, $profilePic
         $hashPass       = password_hash($passsword, PASSWORD_DEFAULT);
         $activationCode = generateCode(16);
         $stmt           = $db->prepare($command);
-        $stmt->execute(array($f_name, $l_name, $email, $username, $hashPass, 0, $activationCode, $profilePicture, $birthday, $phonenumber));
+        $stmt->execute(array($f_name, $l_name, $email, $username, $hashPass, 0, $activationCode, $profilePicture, $birthday, $phonenumber, $education, $location, $skill, $notes));
         $newAccount = $db->lastInsertId();
         // Send mail
        // die();

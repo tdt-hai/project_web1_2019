@@ -37,8 +37,8 @@ if ($currentUser) {
                         ?>
                 <div class="alert alert-warning alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
-                    Vui lòng nhập đầy đủ thông tin
+                    <h5><i class="icon fas fa-exclamation-triangle"></i> Vui lòng nhập đầy đủ thông tin</h5>
+                   
                 </div>
                 <?php
                             } else {
@@ -47,8 +47,8 @@ if ($currentUser) {
                                     ?>
                 <div class="alert alert-warning alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
-                    Vui lòng nhập mật khẩu từ 6 - 15 kí tự
+                    <h5><i class="icon fas fa-exclamation-triangle"></i> Vui lòng nhập mật khẩu từ 6 - 15 kí tự</h5>
+                    
                 </div>
                 <?php
                                     } else {
@@ -58,8 +58,8 @@ if ($currentUser) {
                                                 ?>
                 <div class="alert alert-warning alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
-                    Email đã được đăng ký
+                    <h5><i class="icon fas fa-exclamation-triangle"></i> Email đã được đăng ký</h5>
+                    
                 </div>
                 <?php
                                                 } elseif ($getUserUsername) {
@@ -67,19 +67,19 @@ if ($currentUser) {
                                                     ?>
                 <div class="alert alert-warning alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
-                    Username đã tồn tại
+                    <h5><i class="icon fas fa-exclamation-triangle"></i> Username đã tồn tại</h5>
+                    
                 </div>
                 <?php
                                                 }
                                             } else {
                                         
-                                $newUserID = createUser($f_name, $l_name, $email, $username, $password, '', $birthday, $phonenumber);
+                                $newUserID = createUser($f_name, $l_name, $email, $username, $password, '', $birthday, $phonenumber, '', '', '', '');
                                 ?>
                 <div class="alert alert-success alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h5><i class="icon fas fa-check"></i> Thành công!</h5>
-                    Đăng kí thành công. Kiểm tra email để kích hoạt tài khoản!
+                    <h5><i class="icon fas fa-check"></i> Đăng kí thành công. Kiểm tra email để kích hoạt tài khoản!</h5>
+                    
                 </div>
                 <?php
                                 }

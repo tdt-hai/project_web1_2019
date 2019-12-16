@@ -25,16 +25,16 @@ if ($currentUser) {
                         ?>
                     <div class="alert alert-success alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        <h5><i class="icon fas fa-check"></i> Thành công!</h5>
-                        Thay đổi mật khẩu thành công!
+                        <h5><i class="icon fas fa-check"></i> Thay đổi mật khẩu thành công!</h5>
+                        
                     </div>
                     <?php
                     } else {
                         ?>
                     <div class="alert alert-warning alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
-                        Mật khẩu xác nhận không chính xác!
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Mật khẩu xác nhận không chính xác!</h5>
+                        
                     </div>
                     <?php
                     }
@@ -42,8 +42,8 @@ if ($currentUser) {
                     ?>
                     <div class="alert alert-warning alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
-                        Vui lòng nhập mật khẩu từ 6 đến 15 ký tự! 
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Vui lòng nhập mật khẩu từ 6 đến 15 ký tự!</h5>
+                         
                     </div>
                     <?php 
                 }
@@ -51,8 +51,8 @@ if ($currentUser) {
                 ?>
                     <div class="alert alert-warning alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
-                        Vui lòng nhập đầy đủ thông tin!
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Vui lòng nhập đầy đủ thông tin!/h5>
+                        
                     </div>
                     <?php
             }
