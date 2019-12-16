@@ -146,18 +146,18 @@ function getNewsFeed($start, $limit)
 }
 
 /// Add new post
-function createPost($userID, $content, $pic)
+function createPost($userID, $content,$privacy,$image)
 {
         global $db;
-        $command = "INSERT INTO `user_posts` (content, id,picture) VALUES (?, ?,?)";
+        $command = "INSERT INTO `user_posts` (image,privacy,content, id) VALUES (?, ? ,? ,?)";
         $stmt    = $db->prepare($command);
-        $stmt->execute(array($content, $userID,$pic));
+        $stmt->execute(array($image,$privacy,$content, $userID));
         return $db->lastInsertId();
 }
 function showPost($id)
 {
         global $db;
-        $stmt = $db->prepare("SELECT us.Picture, us.postID, uc.profilePicture,uc.firstname,uc.lastname,us.post_time,us.content FROM `user_posts` us, user_accounts uc Where us.id= ?
+        $stmt = $db->prepare("SELECT us.postID, uc.profilePicture,uc.firstname,uc.lastname,us.post_time,us.content,us.privacy,us.image FROM `user_posts` us, user_accounts uc Where us.id= ?
                                 and us.id=uc.id order by `post_time` DESC");
         $stmt->execute(array($id));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -265,7 +265,8 @@ function Send_Accept_FriendRequest($userid1, $userid2)
 {
         global $db;
         $stmt = $db->prepare("INSERT INTO friends(UserID_1,UserID_2) VALUES(?, ?)");
-        $stmt->execute(array($userid1, $userid2));
+        $newAccount = $stmt->execute(array($userid1, $userid2));
+        return $newAccount;
 }
 function cancel_delete_FriendRequest($userid1, $userid2)
 {
@@ -311,7 +312,7 @@ function getNewFeedsForUserId($userId,$start,$limit) {
           $friendIds[] = $friend['id'];
         }
         $friendIds[] = $userId;
-        $stmt = $db->prepare("SELECT p.postID, p.id, u.firstname ,u.lastname, u.profilePicture, p.content, p.post_time FROM user_posts as p LEFT JOIN user_accounts as u ON u.id = p.id WHERE p.id IN (" . implode(',', $friendIds) .  ") ORDER BY post_time DESC LIMIT ?,?");
+        $stmt = $db->prepare("SELECT p.postID, p.id, u.firstname ,u.lastname, u.profilePicture, p.content, p.post_time,p.privacy,p.image FROM user_posts as p LEFT JOIN user_accounts as u ON u.id = p.id WHERE p.id IN (" . implode(',', $friendIds) .  ") ORDER BY post_time DESC LIMIT ?,?");
         $stmt->bindParam(1, $start, PDO::PARAM_INT);
         $stmt->bindParam(2, $limit, PDO::PARAM_INT);
         $stmt->execute();
@@ -376,7 +377,6 @@ function showComment($idPost)
         $stmt->execute(array($idPost));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-
 function sendEmailAddFriend($email, $l_name,$from,$idfrom)
 {
         global $BASE_URL;
@@ -387,4 +387,51 @@ function sendEmailAddFriend($email, $l_name,$from,$idfrom)
                 "$from sent you a friend request 
                 <a href=\"$BASE_URL/information.php?id=$idfrom\">$BASE_URL/information.php?id=$idfrom</a>"
         );
+} 
+/////LIKE
+function Likes($postID, $userID)
+{
+        global $db;
+        $stmt = $db->prepare("INSERT INTO postlikes(PostID,UserID) VALUES(?, ?)");
+        $newAccount = $stmt->execute(array($postID, $userID)); 
+        return $newAccount;
 }
+function Unlikes($postID, $userID)
+{
+        global $db;
+        $stmt = $db->prepare("DELETE FROM postlikes WHERE  PostID = ? AND UserID = ?");
+        $stmt->execute(array($postID,$userID));
+}
+function findlikeforUserID($postID,$userID)
+{
+        global $db;
+        $stmt = $db->prepare("SELECT * FROM postlikes WHERE PostID = ? and UserID = ?");
+        $stmt->execute(array($postID,$userID));
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+function findlikePost($postID)
+{
+        global $db;
+        $stmt = $db->prepare("SELECT * FROM postlikes WHERE PostID = ?");
+        $stmt->execute(array($postID));
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+function updatePublic($postID){
+        global $db;
+        $command  = "UPDATE `user_posts` SET `privacy`= 0 WHERE `postID` = ?";
+        $stmt     = $db->prepare($command);
+        return $stmt->execute(array($postID));
+}
+function updateFriend($postID){
+        global $db;
+        $command  = "UPDATE `user_posts` SET `privacy`= 1 WHERE `postID` = ?";
+        $stmt     = $db->prepare($command);
+        return $stmt->execute(array($postID));
+}
+function updatePrivate($postID){
+        global $db;
+        $command  = "UPDATE `user_posts` SET `privacy`= 2 WHERE `postID` = ?";
+        $stmt     = $db->prepare($command);
+        return $stmt->execute(array($postID));
+}
+

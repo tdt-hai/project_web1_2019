@@ -1,7 +1,7 @@
                 </div>
                 <div class="container-fluid-bd">
 
-                   
+
 
                 </div>
                 <!-- Optional JavaScript -->
@@ -40,17 +40,30 @@ $(function() {
         endDate: moment()
     }, )
 })
-                </script>
-       <!-- Footer -->
-<footer class="navbar-primary navbar-dark" >
-<!-- Copyright -->
-<div class="footer-copyright text-center py-3">© 2019 Copyright:
-  <a style="color: black;">HHN</a>
-</div>
-<!-- Copyright -->
 
-</footer>
-<!-- Footer -->
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('#blah')
+                .attr('src', e.target.result)
+                .width(150)
+                .height(200);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+                </script>
+                <!-- Footer -->
+                <footer class="navbar-primary navbar-dark">
+                    <!-- Copyright -->
+                    <div class="footer-copyright text-center py-3">© 2019 Copyright:
+                        <a style="color: black;">HHN</a>
+                    </div>
+                    <!-- Copyright -->
+
+                </footer>
+                <!-- Footer -->
                 </body>
 
                 </html>
