@@ -15,6 +15,11 @@ if (!$currentUser) {
                 $l_name = $_POST['l-name'];
                 $birthday = $_POST['b-date'];
                 $phonenumber = $_POST['phoneNumber'];
+                $education = $_POST['education'];
+                $location = $_POST['location'];
+                $skill = $_POST['skill'];
+                $notes = $_POST['notes'];
+                
                 // Upload Image
                 $fileSize = $_FILES['profilePicture']['size'];
                 if (isset($_FILES['profilePicture'])) {
@@ -28,7 +33,7 @@ if (!$currentUser) {
 
                             $imagetmp = file_get_contents($fileTmp);
                             if (updateUserProfilePicture($currentUser['id'], $imagetmp) && !empty(trim($f_name)) && !empty(trim($l_name))) {
-                                updateUserProfile($currentUser['id'], $f_name, $l_name, $phonenumber, $birthday);
+                                updateUserProfile($currentUser['id'], $f_name, $l_name, $phonenumber, $birthday, $education, $location, $skill, $notes);
                                 ?>
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -67,7 +72,7 @@ if (!$currentUser) {
         <?php
                     }
                     else {
-                        updateUserProfile($currentUser['id'], $f_name, $l_name, $phonenumber, $birthday);
+                        updateUserProfile($currentUser['id'], $f_name, $l_name, $phonenumber, $birthday, $education, $location, $skill, $notes);
                         ?>
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -81,13 +86,12 @@ if (!$currentUser) {
         ?>
 
         <div class="login-logo">
-            <a><b>Lotus</b></a>
+            <a><b>Đổi thông tin cá nhân.</b></a>
         </div>
         <!-- /.login-logo -->
         <div class="card">
             <div class="card-body login-card-body">
-                <p class="login-box-msg"> Bạn chỉ còn một bước nữa từ mật khẩu mới, khôi phục mật khẩu của bạn ngay bây
-                    giờ.</p>
+                
                 <form action="updateProfile.php" method="POST" enctype="multipart/form-data">
                     <div class="input-group mb-3">
                         <div class="custom-file">
@@ -138,6 +142,50 @@ if (!$currentUser) {
                             </div>
                         </div>
                     </div>
+                    <!-- <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">About Me</h3> -->
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="education" name="education" placeholder="Học vấn"
+                            value="<?php echo $currentUser['education']; ?>">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-book mr"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="location" name="location" placeholder="Nơi sống"
+                            value="<?php echo $currentUser['location']; ?>">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-map-marker-alt mr"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="skill" name="skill" placeholder="Kĩ năng"
+                            value="<?php echo $currentUser['skill']; ?>">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-pencil-alt mr"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="notes" name="notes" placeholder="Nơi sống"
+                            value="<?php echo $currentUser['notes']; ?>">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="far fa-file-alt mr"></span>
+                            </div>
+                        </div>
+                    </div>
+                        <!-- </div> -->
+
                     <div class="row">
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary btn-block">Xác nhận</button>

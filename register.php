@@ -74,7 +74,7 @@ if ($currentUser) {
                                                 }
                                             } else {
                                         
-                                $newUserID = createUser($f_name, $l_name, $email, $username, $password, '', $birthday, $phonenumber);
+                                $newUserID = createUser($f_name, $l_name, $email, $username, $password, '', $birthday, $phonenumber, '', '', '', '');
                                 ?>
                 <div class="alert alert-success alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

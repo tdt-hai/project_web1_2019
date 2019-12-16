@@ -47,15 +47,15 @@ function generateCode($length = 10)
 }
 
 // Create a user's account
-function createUser($f_name, $l_name, $email, $username, $passsword, $profilePicture, $birthday, $phonenumber)
+function createUser($f_name, $l_name, $email, $username, $passsword, $profilePicture, $birthday, $phonenumber, $education, $location, $skill, $notes)
 {
         global $db, $BASE_URL;
-        $command = "INSERT INTO `user_accounts`(`firstname`, `lastname`, `email`, `username`, `password`, `confirmStatus`, `activationCode`,profilePicture,Birthday,phoneNumber)
-                VALUES (?, ?, ?, ?, ?, ?, ?,?,?,?)";
+        $command = "INSERT INTO `user_accounts`(`firstname`, `lastname`, `email`, `username`, `password`, `confirmStatus`, `activationCode`, `profilePicture`, `Birthday`, `phoneNumber`, `education`, `location`, `skill`, `notes`)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $hashPass       = password_hash($passsword, PASSWORD_DEFAULT);
         $activationCode = generateCode(16);
         $stmt           = $db->prepare($command);
-        $stmt->execute(array($f_name, $l_name, $email, $username, $hashPass, 0, $activationCode, $profilePicture, $birthday, $phonenumber));
+        $stmt->execute(array($f_name, $l_name, $email, $username, $hashPass, 0, $activationCode, $profilePicture, $birthday, $phonenumber, $education, $location, $skill, $notes));
         $newAccount = $db->lastInsertId();
         // Send mail
         //die();
@@ -80,12 +80,12 @@ function updateUserPassword($email, $newPass)
 }
 
 /// Update Profile
-function updateUserProfile($id, $f_name, $l_name, $phonenumber, $birthday)
+function updateUserProfile($id, $f_name, $l_name, $phonenumber, $birthday, $education, $location, $skill, $notes)
 {
         global $db;
-        $command = "UPDATE `user_accounts` SET `firstname`= ?, `lastname` = ?, `phoneNumber` = ?, `Birthday` = ? WHERE `id` = ?";
+        $command = "UPDATE `user_accounts` SET `firstname`= ?, `lastname` = ?, `phoneNumber` = ?, `Birthday` = ?, `education` = ?, `location` = ?, `skill` = ?, `notes` = ? WHERE `id` = ?";
         $stmt    = $db->prepare($command);
-        return $stmt->execute(array($f_name, $l_name, $phonenumber, $birthday, $id));
+        return $stmt->execute(array($f_name, $l_name, $phonenumber, $birthday, $education, $location, $skill, $notes, $id));
 }
 /// Update Profile Picture
 function updateUserProfilePicture($id, $image)
@@ -95,6 +95,7 @@ function updateUserProfilePicture($id, $image)
         $stmt    = $db->prepare($command);
         return $stmt->execute(array($image, $id));
 }
+
 
 // Resize image
 function resizeImage($filename, $max_width, $max_height)
