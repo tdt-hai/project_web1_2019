@@ -16,6 +16,8 @@ if (count($relationship) === 1)
 if($_POST['action'] === 'Gửi yêu cầu kết bạn')
 {
     Send_Accept_FriendRequest($currentUser['id'],$user['id']);
+    $fullname = $currentUser['firstname'] . ' ' . $currentUser['lastname'];
+    sendEmailAddFriend($user['email'], $user['lastname'],$fullname, $currentUser['id']);
 }
 if($_POST['action'] === 'Hủy yêu cầu kết bạn' || $_POST['action'] === 'Xóa bạn bè')
 {

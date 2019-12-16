@@ -50,15 +50,15 @@ function generateCode($length = 10)
 function createUser($f_name, $l_name, $email, $username, $passsword, $profilePicture, $birthday, $phonenumber, $education, $location, $skill, $notes)
 {
         global $db, $BASE_URL;
-        $command = "INSERT INTO `user_accounts`(`firstname`, `lastname`, `email`, `username`, `password`, `confirmStatus`, `activationCode`, `profilePicture`, `Birthday`, `phoneNumber`, `education`, `location`, `skill`, `notes`)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $command = "INSERT INTO `user_accounts`(`firstname`, `lastname`, `email`, `username`, `password`, `confirmStatus`, `activationCode`,profilePicture,Birthday,phoneNumber,Education,Location,Skill,Notes)
+                VALUES (?, ?, ?, ?, ?, ?, ?,?,?,?,null,null,null,null)";
         $hashPass       = password_hash($passsword, PASSWORD_DEFAULT);
         $activationCode = generateCode(16);
         $stmt           = $db->prepare($command);
         $stmt->execute(array($f_name, $l_name, $email, $username, $hashPass, 0, $activationCode, $profilePicture, $birthday, $phonenumber, $education, $location, $skill, $notes));
         $newAccount = $db->lastInsertId();
         // Send mail
-        //die();
+       // die();
         sendMail(
                 $email,
                 $l_name,
@@ -80,12 +80,12 @@ function updateUserPassword($email, $newPass)
 }
 
 /// Update Profile
-function updateUserProfile($id, $f_name, $l_name, $phonenumber, $birthday, $education, $location, $skill, $notes)
+function updateUserProfile($id, $f_name, $l_name, $phonenumber, $birthday, $education,$location,$skill, $notes)
 {
         global $db;
-        $command = "UPDATE `user_accounts` SET `firstname`= ?, `lastname` = ?, `phoneNumber` = ?, `Birthday` = ?, `education` = ?, `location` = ?, `skill` = ?, `notes` = ? WHERE `id` = ?";
+        $command = "UPDATE `user_accounts` SET `firstname`= ?, `lastname` = ?, `phoneNumber` = ?, `Birthday` = ? ,Education=? , Location = ?, Skill = ?, Notes = ? WHERE `id` = ?";
         $stmt    = $db->prepare($command);
-        return $stmt->execute(array($f_name, $l_name, $phonenumber, $birthday, $education, $location, $skill, $notes, $id));
+        return $stmt->execute(array($f_name, $l_name, $phonenumber, $birthday ,$education,$location,$skill,$notes, $id));
 }
 /// Update Profile Picture
 function updateUserProfilePicture($id, $image)
@@ -96,7 +96,14 @@ function updateUserProfilePicture($id, $image)
         return $stmt->execute(array($image, $id));
 }
 
-
+//Upload image on timeline
+function uploadImageOnTimeline($image)
+{
+    global $db;
+    $command = "UPDATE `user_accounts` SET `profilePicture` = ? WHERE `id` = ?";
+    $stmt    = $db->prepare($command);
+    return $stmt->execute(array($image, $id));
+}
 // Resize image
 function resizeImage($filename, $max_width, $max_height)
 {
@@ -139,18 +146,18 @@ function getNewsFeed($start, $limit)
 }
 
 /// Add new post
-function createPost($userID, $content)
+function createPost($userID, $content,$privacy,$image)
 {
         global $db;
-        $command = "INSERT INTO `user_posts` (content, id) VALUES (?, ?)";
+        $command = "INSERT INTO `user_posts` (image,privacy,content, id) VALUES (?, ? ,? ,?)";
         $stmt    = $db->prepare($command);
-        $stmt->execute(array($content, $userID));
+        $stmt->execute(array($image,$privacy,$content, $userID));
         return $db->lastInsertId();
 }
 function showPost($id)
 {
         global $db;
-        $stmt = $db->prepare("SELECT us.postID, uc.profilePicture,uc.firstname,uc.lastname,us.post_time,us.content FROM `user_posts` us, user_accounts uc Where us.id= ?
+        $stmt = $db->prepare("SELECT us.postID, uc.profilePicture,uc.firstname,uc.lastname,us.post_time,us.content,us.privacy,us.image FROM `user_posts` us, user_accounts uc Where us.id= ?
                                 and us.id=uc.id order by `post_time` DESC");
         $stmt->execute(array($id));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -216,8 +223,15 @@ function addRecoverCode($activationCode, $email, $username, $l_name)
         $command = "UPDATE `user_accounts` SET `activationCode` = ? WHERE `email` = ? OR `username` = ?";
         $stmt    = $db->prepare($command);
         $stmt->execute(array($activationCode, $email, $username));
+
         // Send mail
-        sendMail( $email, $l_name,'Recover your account',"Click the link to change password:<a href=\"$BASE_URL/confirmEmail.php?activationCode=$activationCode\">$BASE_URL/confirmEmail.php?activationCode=$activationCode</a>");
+        sendMail(
+                $email,
+                $l_name,
+                'Recover your account',
+                "Click the link to change password:
+  <a href=\"$BASE_URL/confirmEmail.php?activationCode=$activationCode\">$BASE_URL/confirmEmail.php?activationCode=$activationCode</a>"
+        );
 }
 //Xóa status
 function DeleteContentbyID($id)
@@ -225,7 +239,6 @@ function DeleteContentbyID($id)
         global $db;
         $stmt = $db->prepare("DELETE FROM `user_posts` WHERE `postID` = ? ");
         $stmt->execute(array($id));
-        //return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 //PHÂN TRANG
 //total page
@@ -251,7 +264,8 @@ function Send_Accept_FriendRequest($userid1, $userid2)
 {
         global $db;
         $stmt = $db->prepare("INSERT INTO friends(UserID_1,UserID_2) VALUES(?, ?)");
-        $stmt->execute(array($userid1, $userid2));
+        $newAccount = $stmt->execute(array($userid1, $userid2));
+        return $newAccount;
 }
 function cancel_delete_FriendRequest($userid1, $userid2)
 {
@@ -259,7 +273,6 @@ function cancel_delete_FriendRequest($userid1, $userid2)
         $stmt = $db->prepare("DELETE FROM friends WHERE ( UserID_1 = ? AND UserID_2 = ?) OR ( UserID_1 = ? AND UserID_2 = ?) ");
         $stmt->execute(array($userid1, $userid2, $userid2, $userid1));
 }
-//Hàm lấy tất cả bạn bè của userID
 function getFriends($userId)
 {
         global $db;
@@ -288,6 +301,7 @@ function getSuggestionFriend() {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 //hàm newfeed khi đã là friend
 function getNewFeedsForUserId($userId,$start,$limit) {
         global $db;
@@ -297,23 +311,12 @@ function getNewFeedsForUserId($userId,$start,$limit) {
           $friendIds[] = $friend['id'];
         }
         $friendIds[] = $userId;
-        $stmt = $db->prepare("SELECT p.postID, p.id, u.firstname ,u.lastname, u.profilePicture, p.content, p.post_time FROM user_posts as p LEFT JOIN user_accounts as u ON u.id = p.id WHERE p.id IN (" . implode(',', $friendIds) .  ") ORDER BY post_time DESC LIMIT ?,?");
+        $stmt = $db->prepare("SELECT p.postID, p.id, u.firstname ,u.lastname, u.profilePicture, p.content, p.post_time,p.privacy,p.image FROM user_posts as p LEFT JOIN user_accounts as u ON u.id = p.id WHERE p.id IN (" . implode(',', $friendIds) .  ") ORDER BY post_time DESC LIMIT ?,?");
         $stmt->bindParam(1, $start, PDO::PARAM_INT);
         $stmt->bindParam(2, $limit, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-// function banbe()
-// {
-//         global $db;
-//         $stmt = $db->prepare("SELECT * FROM user_accounts u WHERE u.id  NOT IN ( SELECT u.id 
-//                                                                                 FROM friends f ,user_accounts u 
-//                                                                                 WHERE (f.UserID_1 = u.id )OR( f.UserID_2 = u.id))");
-//         $stmt->execute();
-//         $followings = $stmt->fetchAll(PDO::FETCH_ASSOC);
-//         return $followings;
-// }
-
 //Lấy tin nhắn gần đây nhất 
 function getLatestConversations($userId) {
         global $db;
@@ -362,3 +365,67 @@ function showComment($idPost)
         $stmt->execute(array($idPost));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+function sendEmailAddFriend($email, $l_name,$from,$idfrom)
+{
+        global $BASE_URL;
+        sendMail(
+                $email,
+                $l_name,
+                'Friend request',
+                "$from sent you a friend request 
+                <a href=\"$BASE_URL/information.php?id=$idfrom\">$BASE_URL/information.php?id=$idfrom</a>"
+        );
+} 
+/////LIKE
+function Likes($postID, $userID)
+{
+        global $db;
+        $stmt = $db->prepare("INSERT INTO postlikes(PostID,UserID) VALUES(?, ?)");
+        $newAccount = $stmt->execute(array($postID, $userID)); 
+        return $newAccount;
+}
+function Unlikes($postID, $userID)
+{
+        global $db;
+        $stmt = $db->prepare("DELETE FROM postlikes WHERE  PostID = ? AND UserID = ?");
+        $stmt->execute(array($postID,$userID));
+}
+function findlikeforUserID($postID,$userID)
+{
+        global $db;
+        $stmt = $db->prepare("SELECT * FROM postlikes WHERE PostID = ? and UserID = ?");
+        $stmt->execute(array($postID,$userID));
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+function findlikePost($postID)
+{
+        global $db;
+        $stmt = $db->prepare("SELECT * FROM postlikes WHERE PostID = ?");
+        $stmt->execute(array($postID));
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+function updatePublic($postID){
+        global $db;
+        $command  = "UPDATE `user_posts` SET `privacy`= 0 WHERE `postID` = ?";
+        $stmt     = $db->prepare($command);
+        return $stmt->execute(array($postID));
+}
+function updateFriend($postID){
+        global $db;
+        $command  = "UPDATE `user_posts` SET `privacy`= 1 WHERE `postID` = ?";
+        $stmt     = $db->prepare($command);
+        return $stmt->execute(array($postID));
+}
+function updatePrivate($postID){
+        global $db;
+        $command  = "UPDATE `user_posts` SET `privacy`= 2 WHERE `postID` = ?";
+        $stmt     = $db->prepare($command);
+        return $stmt->execute(array($postID));
+}
+function DeleteMessageforUserID($userID1,$UserID2)
+{
+        global $db;
+        $stmt = $db->prepare("DELETE FROM `messages` WHERE `UserID1` = ?  and UserID2 = ?" );
+        $stmt->execute(array($userID1,$UserID2));
+}
+

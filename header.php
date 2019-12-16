@@ -37,6 +37,7 @@ $conversations = getLatestConversations($currentUser['id']);
         <nav class="navbar navbar-expand navbar-primary navbar-dark">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
+
                 <?php if (!$currentUser) : ?>
                 <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'login' ? 'active' : ''; ?>">
                     <a href="login.php" class=" nav-link fas fa-sign-in-alt"> Đăng nhập</a>
@@ -79,8 +80,8 @@ $conversations = getLatestConversations($currentUser['id']);
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <?php foreach ($conversations as $conversation) : ?>
-                       
-                        <a href="conversation.php?id=<?php echo $conversation['id'] ?>"class="dropdown-item">
+
+                        <a href="conversation.php?id=<?php echo $conversation['id'] ?>" class="dropdown-item">
                             <!-- Message Start -->
                             <div class="media">
                                 <img class="direct-chat-img"
@@ -88,11 +89,13 @@ $conversations = getLatestConversations($currentUser['id']);
                                     alt="User Avatar" class="img-size-50 img-circle mr-3 ">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
-                                         &ensp; <?php echo $conversation['firstname'].''.$conversation['lastname']  ?>
+                                        &ensp; <?php echo $conversation['firstname'].''.$conversation['lastname']  ?>
                                         <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
                                     </h3>
                                     <p class="text-sm"> &ensp; <?php echo $conversation['lastMessage']['Content'] ?></p>
-                                    <p class="text-sm text-muted"> &ensp;&ensp;<i class="far fa-clock mr-1"></i><?php echo $conversation['lastMessage']['CreateTime'] ?></p>
+                                    <p class="text-sm text-muted"> &ensp;&ensp;<i
+                                            class="far fa-clock mr-1"></i><?php echo $conversation['lastMessage']['CreateTime'] ?>
+                                    </p>
                                 </div>
                             </div>
                             <!-- Message End -->
@@ -132,9 +135,13 @@ $conversations = getLatestConversations($currentUser['id']);
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown"><img
-                            src="<?php echo 'data:image/jpeg;base64,' . base64_encode($currentUser['profilePicture']); ?>"
+                    <a class="nav-link" data-toggle="dropdown">
+                        <?php if($currentUser['profilePicture'] == null):?>
+                        <img src="./images/profile_default.jpg" class="img-circle" alt="Avatar" width="25" height="25">
+                        <?php else:?>
+                        <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($currentUser['profilePicture']); ?>"
                             class="img-circle" alt="Avatar" width="25" height="25">
+                        <?php endif; ?>
                         <?php echo $currentUser['firstname'] .' '. $currentUser['lastname']; ?>
                         <span><?php $currentUser['firstname'].''.$currentUser['lastname'] ;?></span></a>
                     <ul class=" dropdown-menu  dropdown-menu-right">

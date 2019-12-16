@@ -18,8 +18,7 @@ if (!$currentUser) {
                 $education = $_POST['education'];
                 $location = $_POST['location'];
                 $skill = $_POST['skill'];
-                $notes = $_POST['notes'];
-                
+                $notes = $_POST['note'];
                 // Upload Image
                 $fileSize = $_FILES['profilePicture']['size'];
                 if (isset($_FILES['profilePicture'])) {
@@ -33,7 +32,7 @@ if (!$currentUser) {
 
                             $imagetmp = file_get_contents($fileTmp);
                             if (updateUserProfilePicture($currentUser['id'], $imagetmp) && !empty(trim($f_name)) && !empty(trim($l_name))) {
-                                updateUserProfile($currentUser['id'], $f_name, $l_name, $phonenumber, $birthday, $education, $location, $skill, $notes);
+                                updateUserProfile($currentUser['id'], $f_name, $l_name, $phonenumber, $birthday,$education,$location,$skill,$notes);
                                 ?>
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -72,7 +71,7 @@ if (!$currentUser) {
         <?php
                     }
                     else {
-                        updateUserProfile($currentUser['id'], $f_name, $l_name, $phonenumber, $birthday, $education, $location, $skill, $notes);
+                        updateUserProfile($currentUser['id'], $f_name, $l_name, $phonenumber, $birthday,$education,$location,$skill,$notes);
                         ?>
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -96,8 +95,8 @@ if (!$currentUser) {
                     <div class="input-group mb-3">
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="profilePicture" name="profilePicture"
-                                accept="image/*">
-                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                accept="image/jpeg">
+                            <label class="custom-file-label" for="exampleInputFile">image</label>
                         </div>
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -142,50 +141,42 @@ if (!$currentUser) {
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="card card-primary">
-                        <div class="card-header">
-                            <h3 class="card-title">About Me</h3> -->
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="education" name="education" placeholder="Học vấn"
-                            value="<?php echo $currentUser['education']; ?>">
+                        <input type="text" class="form-control"  name="education" value="<?php echo $currentUser['Education']; ?>" placeholder="Học ở đâu ?">
+                        
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-book mr"></span>
+                                <span class="fas fa-university"></span>
                             </div>
                         </div>
                     </div>
-
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="location" name="location" placeholder="Nơi sống"
-                            value="<?php echo $currentUser['location']; ?>">
+                        <input type="text" class="form-control"  name="location" value="<?php echo $currentUser['Location']; ?>" placeholder="Thành phố hiện tại của bạn">
+                        
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-map-marker-alt mr"></span>
+                                <span class="fas fa-city"></span>
                             </div>
                         </div>
                     </div>
-
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="skill" name="skill" placeholder="Kĩ năng"
-                            value="<?php echo $currentUser['skill']; ?>">
+                        <input type="text" class="form-control" name="skill" value="<?php echo $currentUser['Skill']; ?>" placeholder="Kĩ năng của bạn">
+                        
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-pencil-alt mr"></span>
+                                <span class="fas fa-lightbulb"></span>
                             </div>
                         </div>
                     </div>
-                    
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="notes" name="notes" placeholder="Nơi sống"
-                            value="<?php echo $currentUser['notes']; ?>">
+                        <input type="text" class="form-control" name="note" value="<?php echo $currentUser['Notes']; ?>" placeholder="Bio">
+                        
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="far fa-file-alt mr"></span>
+                                <span class="fas fa-history"></span>
                             </div>
                         </div>
                     </div>
-                        <!-- </div> -->
-
                     <div class="row">
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary btn-block">Xác nhận</button>
