@@ -50,8 +50,8 @@ function generateCode($length = 10)
 function createUser($f_name, $l_name, $email, $username, $passsword, $profilePicture, $birthday, $phonenumber)
 {
         global $db, $BASE_URL;
-        $command = "INSERT INTO `user_accounts`(`firstname`, `lastname`, `email`, `username`, `password`, `confirmStatus`, `activationCode`,profilePicture,Birthday,phoneNumber)
-                VALUES (?, ?, ?, ?, ?, ?, ?,?,?,?)";
+        $command = "INSERT INTO `user_accounts`(`firstname`, `lastname`, `email`, `username`, `password`, `confirmStatus`, `activationCode`,profilePicture,Birthday,phoneNumber,Education,Location,Skill,Notes)
+                VALUES (?, ?, ?, ?, ?, ?, ?,?,?,?,null,null,null,null)";
         $hashPass       = password_hash($passsword, PASSWORD_DEFAULT);
         $activationCode = generateCode(16);
         $stmt           = $db->prepare($command);
@@ -80,12 +80,12 @@ function updateUserPassword($email, $newPass)
 }
 
 /// Update Profile
-function updateUserProfile($id, $f_name, $l_name, $phonenumber, $birthday)
+function updateUserProfile($id, $f_name, $l_name, $phonenumber, $birthday, $education,$location,$skill, $notes)
 {
         global $db;
-        $command = "UPDATE `user_accounts` SET `firstname`= ?, `lastname` = ?, `phoneNumber` = ?, `Birthday` = ? WHERE `id` = ?";
+        $command = "UPDATE `user_accounts` SET `firstname`= ?, `lastname` = ?, `phoneNumber` = ?, `Birthday` = ? ,Education=? , Location = ?, Skill = ?, Notes = ? WHERE `id` = ?";
         $stmt    = $db->prepare($command);
-        return $stmt->execute(array($f_name, $l_name, $phonenumber, $birthday, $id));
+        return $stmt->execute(array($f_name, $l_name, $phonenumber, $birthday ,$education,$location,$skill,$notes, $id));
 }
 /// Update Profile Picture
 function updateUserProfilePicture($id, $image)
@@ -224,7 +224,6 @@ function DeleteContentbyID($id)
         global $db;
         $stmt = $db->prepare("DELETE FROM `user_posts` WHERE `postID` = ? ");
         $stmt->execute(array($id));
-        //return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 //PHÂN TRANG
 //total page
@@ -303,17 +302,6 @@ function getNewFeedsForUserId($userId,$start,$limit) {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-// function banbe()
-// {
-//         global $db;
-//         $stmt = $db->prepare("SELECT * FROM user_accounts u WHERE u.id  NOT IN ( SELECT u.id 
-//                                                                                 FROM friends f ,user_accounts u 
-//                                                                                 WHERE (f.UserID_1 = u.id )OR( f.UserID_2 = u.id))");
-//         $stmt->execute();
-//         $followings = $stmt->fetchAll(PDO::FETCH_ASSOC);
-//         return $followings;
-// }
-
 //Lấy tin nhắn gần đây nhất 
 function getLatestConversations($userId) {
         global $db;
@@ -418,6 +406,12 @@ function updatePrivate($postID){
         $command  = "UPDATE `user_posts` SET `privacy`= 2 WHERE `postID` = ?";
         $stmt     = $db->prepare($command);
         return $stmt->execute(array($postID));
+}
+function DeleteMessageforUserID($userID1,$UserID2)
+{
+        global $db;
+        $stmt = $db->prepare("DELETE FROM `messages` WHERE `UserID1` = ?  and UserID2 = ?" );
+        $stmt->execute(array($userID1,$UserID2));
 }
 
 
