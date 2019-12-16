@@ -19,6 +19,11 @@ if (count($relationship) === 1) {
 <?php
 $success = true;
 //CreatePost
+if(isset($_FILES['UploadPicture'])){
+    $fileName = $_FILES['UploadPicture']['name'];
+    $filetmp  = $_FILES['UploadPicture']['tmp_name'];
+   $imagetmp = file_get_contents($filetmp);
+}
 if (isset($_POST['Posts'])) {
     $content = $_POST['content'];
     $privacy = $_POST['w_privacy'];
@@ -26,7 +31,7 @@ if (isset($_POST['Posts'])) {
     if ($lengh == 0 || $lengh > 1024) {
         $success = false;
     } else {
-        createPost($users['id'], $content,$privacy,'');
+        createPost($users['id'], $content,$privacy,$imagetmp);
         header('Location:information.php?id='.$currentUser['id']);
     }
 }
@@ -63,6 +68,7 @@ if (isset($_POST['like'])) {
  }
 ?>
 <?php include 'header.php'; ?>
+<link rel="stylesheet" href="./css_files/style_image.css">
 <!-- --------------------------------------- -->
 
 <!-- Content Wrapper. Contains page content -->
@@ -77,9 +83,14 @@ if (isset($_POST['like'])) {
                 <div class="card card-primary card-outline">
                     <div class="card-body box-profile">
                         <div class="text-center">
+                            <?php if($users['profilePicture']==null):  ?>
+                            <img class="profile-user-img img-fluid img-circle" src="./images/profile_default.jpg"
+                                class="img-circle" alt="Avatar" width="25" height="25">
+                            <?php else:?>
                             <img class="profile-user-img img-fluid img-circle"
                                 src="<?php echo 'data:image/jpeg;base64,' . base64_encode($users['profilePicture']); ?>"
                                 alt="User profile picture">
+                            <?php endif;?>
                         </div>
 
                         <h3 class="profile-username text-center">
@@ -170,7 +181,7 @@ if (isset($_POST['like'])) {
                                 <?php if($currentUser['id'] == $users['id'] ) { ?>
                                 <div class="panel panel-default">
                                     <div class="panel-body">
-                                        <form method="POST">
+                                        <form method="POST" enctype="multipart/form-data">
                                             <div class="input-group input-group-sm mb-0">
                                                 <textarea class="form-control" id="content" name="content"
                                                     placeholder="Bạn đang nghĩ gì..."></textarea>
@@ -186,128 +197,25 @@ if (isset($_POST['like'])) {
                                                     <option value="2"></span> Only me</option>
                                                 </select>
                                             </div>
+                                            <input name="UploadPicture" id="UploadPicture" type="file"
+                                                accept="image/jpeg" onchange="readURL(this);" />
+                                            <img id="blah" class="imgPreview" src="#" alt="" />
                                         </form>
                                     </div>
                                 </div>
-                                <?php }?>
-                                <?php if (!$success) : ?>
-                                <div class="alert alert-danger" role="alert">
-                                    Nội dung không được rỗng và dài quá 1024 ký tự!
-                                </div>
-                                <?php endif; ?>
                             </div>
-
-                            <?php foreach ($posts as $post) : ?>
-                            <?php if($currentUser['id'] == $users['id']){  
-                                        if($post['privacy']==0 || $post['privacy']==1  || $post['privacy']==2){  
-                            ?>
-                            <div class="active tab-pane" id="activity">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <!-- Post -->
-                                        <form method="POST">
-                                            <div class="post">
-                                                <div class="user-block">
-                                                    <img class="img-circle img-bordered-sm"
-                                                        src="<?php echo 'data:image/jpeg;base64,' . base64_encode($post['profilePicture']); ?>"
-                                                        alt="user image">
-                                                    <span class="username">
-                                                        <a href="#" class="dropdown-toggle"
-                                                            data-toggle="dropdown"><?php echo $post['firstname'] . ' ' . $post['lastname']; ?></a>
-                                                        <?php if($currentUser['id'] == $users['id']){ ?>
-                                                        <ul class="dropdown-menu">
-                                                            <form method="POST">
-                                                                <li><button type="submit" name="public" value="<?php echo $post['postID'] ?>"><i class="fas fa-globe-americas"></i>
-                                                                        <span>Public  </span></button></li>
-                                                                <li><button  type="submit" name="friend" value="<?php echo $post['postID'] ?>"><i class="fas fa-user-friends"></i>
-                                                                        <span>Friend</span></button></li>
-                                                                <li><button  type="submit" name="private" value="<?php echo $post['postID'] ?>"><i class="fas fa-lock"></i>
-                                                                        <span>Private</span></button></li>
-                                                            </form>
-                                                        </ul>
-                                                        <?php }?>
-                                                        <?php
-                                                                    if (isset($_POST['delete'])) {
-                                                                                $value = $_POST['delete'];
-                                                                                DeleteContentbyID($value);
-                                                                                header('Location:information.php?id='.$currentUser['id']);
-                                                                    }
-                                                            ?>
-                                                        <?php if ($currentUser['id'] == $users['id']){?>
-                                                        <button type="submit" name="delete"
-                                                            value="<?php echo $post['postID'] ?>"
-                                                            class="float-right btn-tool"><i
-                                                                class="fas fa-times"></i></button>
-                                                        <?php }?>
-                                                    </span>
-                                                    <span class="description">Đăng lúc:
-                                                        <?php echo  $post['post_time'];  ?>
-                                                        <?php if($post['privacy'] == 0):?>
-                                                        <a class="fas fa-globe-europe"></a>
-                                                        <?php elseif($post['privacy'] == 1):?>
-                                                        <a class="fas fa-user-friends"></a>
-                                                        <?php else: ?>
-                                                        <a class="fas fa-lock"></a>
-                                                        <?php endif;?>
-                                                    </span>
-                                                </div>
-                                                <!-- /.user-block -->
-                                                <p>
-                                                    <?php echo $post['content']; ?>
-                                                </p>
-                                        </form>
-                                        <?php $findlikeforUserID = findlikeforUserID($post['postID'],$currentUser['id']); 
-                                                  $Nolike = (count($findlikeforUserID) === 0);
-                                                  $findlikePost = findlikePost($post['postID']);
-                                        ?>
-                                        <form method="POST">
-                                            <p>
-                                                <?php if($Nolike): ?>
-                                                <button class="far fa-thumbs-up mr-1" type="submit" name="like"
-                                                    value="<?php echo $post['postID'] ?>">(<?php echo count($findlikePost)?>)</button>
-                                                <?php else: ?>
-                                                <button class="far fa-thumbs-up mr-1" type="submit" name="unlike"
-                                                    value="<?php echo $post['postID'] ?>"> Đã
-                                                    thích(<?php echo count($findlikePost)?>)</button>
-                                                <?php endif ;?>
-                                                <span class="float-right">
-                                                    <a href="#" class="link-black text-sm">
-                                                        <i class="far fa-comments mr-1"></i> Bình luận
-                                                        (<?php $showComments = showComment($post['postID']); echo count($showComments);?>)
-                                                    </a>
-                                                </span>
-                                            </p>
-                                        </form>
-                                        <form method="POST" class="form-horizontal">
-                                            <div class="input-group input-group-sm mb-0">
-                                                <textarea class="form-control form-control-sm" name="comment" cols="30"
-                                                    rows="2" placeholder="Viết bình luận..."></textarea>
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-primary" type="submit" name="commentts"
-                                                        value="<?php echo $post['postID'] ?>">Bình luận</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                        <?php  foreach($showComments as $showComment):  ?>
-                                        <a class="nav-link" data-toggle="dropdown"><img
-                                                src="<?php echo 'data:image/jpeg;base64,' . base64_encode($showComment['profilePicture']); ?>"
-                                                class="img-circle" alt="Avatar" width="25" height="25">
-                                            <?php echo $showComment['firstname'] .' '. $showComment['lastname']; ?></a>
-                                        <?php echo $showComment['Content']; ?>
-                                        <?php endforeach; ?>
-                                    </div>
-
-                                </div>
-                                <!-- /.post -->
+                            <?php }?>
+                            <?php if (!$success) : ?>
+                            <div class="alert alert-danger" role="alert">
+                                Nội dung không được rỗng và dài quá 1024 ký tự!
                             </div>
+                            <?php endif; ?>
                         </div>
 
-                        <?php 
-                                 }}
-                                 elseif($isFriend){
-                                    if($post['privacy']==1 || $post['privacy']==0){    
-                                      
-                        ?>
+                        <?php foreach ($posts as $post) : ?>
+                        <?php if($currentUser['id'] == $users['id']){  
+                                        if($post['privacy']==0 || $post['privacy']==1  || $post['privacy']==2){  
+                            ?>
                         <div class="active tab-pane" id="activity">
                             <div class="card">
                                 <div class="card-body">
@@ -323,12 +231,20 @@ if (isset($_POST['like'])) {
                                                         data-toggle="dropdown"><?php echo $post['firstname'] . ' ' . $post['lastname'];?></a>
                                                     <?php if($currentUser['id'] == $users['id']){ ?>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="#"><i class="fas fa-globe-americas"></i>
-                                                                <span>public</span></a></li>
-                                                        <li><a href="#"><i class="fas fa-user-friends"></i>
-                                                                <span>Friend</span></a></li>
-                                                        <li><a href="#"><i class="fas fa-lock"></i>
-                                                                <span>private</span></a></li>
+                                                        <form method="POST">
+                                                            <li><button type="submit" name="public"
+                                                                    value="<?php echo $post['postID'] ?>"><i
+                                                                        class="fas fa-globe-americas"></i>
+                                                                    <span>Public </span></button></li>
+                                                            <li><button type="submit" name="friend"
+                                                                    value="<?php echo $post['postID'] ?>"><i
+                                                                        class="fas fa-user-friends"></i>
+                                                                    <span>Friend</span></button></li>
+                                                            <li><button type="submit" name="private"
+                                                                    value="<?php echo $post['postID'] ?>"><i
+                                                                        class="fas fa-lock"></i>
+                                                                    <span>Private</span></button></li>
+                                                        </form>
                                                     </ul>
                                                     <?php }?>
                                                     <?php
@@ -359,6 +275,13 @@ if (isset($_POST['like'])) {
                                             <!-- /.user-block -->
                                             <p>
                                                 <?php echo $post['content']; ?>
+
+                                            </p>
+                                            <p>
+                                                <?php if(!empty($post['image'])){?>
+                                                <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($post['image']); ?>"
+                                                    alt="user image" class="imageShow">
+                                                <?php } ?>
                                             </p>
                                     </form>
                                     <?php $findlikeforUserID = findlikeforUserID($post['postID'],$currentUser['id']); 
@@ -367,13 +290,13 @@ if (isset($_POST['like'])) {
                                         ?>
                                     <form method="POST">
                                         <p>
-                                            <?php if($Nolike): ?>
-                                            <button class="far fa-thumbs-up mr-1" type="submit" name="like"
-                                                value="<?php echo $post['postID'] ?>">(<?php echo count($findlikePost)?>)</button>
+                                            <?php if ($Nolike): ?>
+                                            <button class="far fa-thumbs-up mr-1  " type="submit" name="like"
+                                                value="<?php echo $post['postID'] ?>"></button>(<?php echo count($findlikePost)?>)
                                             <?php else: ?>
-                                            <button class="far fa-thumbs-up mr-1" type="submit" name="unlike"
-                                                value="<?php echo $post['postID'] ?>"> Đã
-                                                thích(<?php echo count($findlikePost)?>)</button>
+                                            <button class="far fa-thumbs-up mr-1  btn-primary " type="submit"
+                                                name="unlike" value="<?php echo $post['postID'] ?>">
+                                            </button> (<?php echo count($findlikePost)?>)
                                             <?php endif ;?>
                                             <span class="float-right">
                                                 <a href="#" class="link-black text-sm">
@@ -393,12 +316,15 @@ if (isset($_POST['like'])) {
                                             </div>
                                         </div>
                                     </form>
+                                   
                                     <?php  foreach($showComments as $showComment):  ?>
-                                    <a class="nav-link" data-toggle="dropdown"><img
-                                            src="<?php echo 'data:image/jpeg;base64,' . base64_encode($showComment['profilePicture']); ?>"
-                                            class="img-circle" alt="Avatar" width="25" height="25">
-                                        <?php echo $showComment['firstname'] .' '. $showComment['lastname']; ?></a>
-                                    <?php echo $showComment['Content']; ?>
+                                    <div>
+                                        <a class="nav-link" data-toggle="dropdown"><img
+                                                src="<?php echo 'data:image/jpeg;base64,' . base64_encode($showComment['profilePicture']); ?>"
+                                                class="img-circle" alt="Avatar" width="25" height="25">
+                                            <b class="profile-username text-center"><?php echo $showComment['firstname'] .' '. $showComment['lastname']; ?></b><br>
+                                            &ensp;&emsp;<?php echo $showComment['Content']; ?></a>
+                                    </div>
                                     <?php endforeach; ?>
                                 </div>
 
@@ -408,9 +334,10 @@ if (isset($_POST['like'])) {
                     </div>
 
                     <?php 
-                     } }
-                            elseif( $norelationship ){
-                            if($post['privacy']==0){ 
+                                 }}
+                                 elseif($isFriend){
+                                    if($post['privacy']==1 || $post['privacy']==0){    
+                                      
                         ?>
                     <div class="active tab-pane" id="activity">
                         <div class="card">
@@ -463,6 +390,12 @@ if (isset($_POST['like'])) {
                                         <p>
                                             <?php echo $post['content']; ?>
                                         </p>
+                                        <p>
+                                            <?php if(!empty($post['image'])){?>
+                                            <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($post['image']); ?>"
+                                                alt="user image" class="imageShow">
+                                            <?php } ?>
+                                        </p>
                                 </form>
                                 <?php $findlikeforUserID = findlikeforUserID($post['postID'],$currentUser['id']); 
                                                   $Nolike = (count($findlikeforUserID) === 0);
@@ -471,12 +404,12 @@ if (isset($_POST['like'])) {
                                 <form method="POST">
                                     <p>
                                         <?php if($Nolike): ?>
-                                        <button class="far fa-thumbs-up mr-1" type="submit" name="like"
-                                            value="<?php echo $post['postID'] ?>">(<?php echo count($findlikePost)?>)</button>
+                                        <button class="far fa-thumbs-up mr-1  " type="submit" name="like"
+                                            value="<?php echo $post['postID'] ?>"></button>(<?php echo count($findlikePost)?>)
                                         <?php else: ?>
-                                        <button class="far fa-thumbs-up mr-1" type="submit" name="unlike"
-                                            value="<?php echo $post['postID'] ?>"> Đã
-                                            thích(<?php echo count($findlikePost)?>)</button>
+                                        <button class="far fa-thumbs-up mr-1  btn-primary " type="submit" name="unlike"
+                                            value="<?php echo $post['postID'] ?>">
+                                        </button>(<?php echo count($findlikePost)?>)
                                         <?php endif ;?>
                                         <span class="float-right">
                                             <a href="#" class="link-black text-sm">
@@ -509,11 +442,119 @@ if (isset($_POST['like'])) {
                         <!-- /.post -->
                     </div>
                 </div>
-                <?php } }?>
-                <?php endforeach; ?>
 
-                <!-- /.tab-pane -->
+                <?php 
+                     } }
+                            elseif( $norelationship || $isrequesting){
+                            if($post['privacy']==0){ 
+                        ?>
+                <div class="active tab-pane" id="activity">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Post -->
+                            <form method="POST">
+                                <div class="post">
+                                    <div class="user-block">
+                                        <img class="img-circle img-bordered-sm"
+                                            src="<?php echo 'data:image/jpeg;base64,' . base64_encode($post['profilePicture']); ?>"
+                                            alt="user image">
+                                        <span class="username">
+                                            <a href="#" class="dropdown-toggle"
+                                                data-toggle="dropdown"><?php echo $post['firstname'] . ' ' . $post['lastname'];?></a>
+                                            <?php if($currentUser['id'] == $users['id']){ ?>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#"><i class="fas fa-globe-americas"></i>
+                                                        <span>public</span></a></li>
+                                                <li><a href="#"><i class="fas fa-user-friends"></i>
+                                                        <span>Friend</span></a></li>
+                                                <li><a href="#"><i class="fas fa-lock"></i>
+                                                        <span>private</span></a></li>
+                                            </ul>
+                                            <?php }?>
+                                            <?php
+                                                                    if (isset($_POST['delete'])) {
+                                                                                $value = $_POST['delete'];
+                                                                                DeleteContentbyID($value);
+                                                                                header('Location:information.php?id='.$currentUser['id']);
+                                                                    }
+                                                            ?>
+                                            <?php if ($currentUser['id'] == $users['id']){?>
+                                            <button type="submit" name="delete" value="<?php echo $post['postID'] ?>"
+                                                class="float-right btn-tool"><i class="fas fa-times"></i></button>
+                                            <?php }?>
+                                        </span>
+                                        <span class="description">Đăng lúc:
+                                            <?php echo  $post['post_time'];  ?>
+                                            <?php if($post['privacy'] == 0):?>
+                                            <a class="fas fa-globe-europe"></a>
+                                            <?php elseif($post['privacy'] == 1):?>
+                                            <a class="fas fa-user-friends"></a>
+                                            <?php else: ?>
+                                            <a class="fas fa-lock"></a>
+                                            <?php endif;?>
+                                        </span>
+                                    </div>
+                                    <!-- /.user-block -->
+                                    <p>
+                                        <?php echo $post['content']; ?>
+                                    </p>
+                                    <p>
+                                        <?php if(!empty($post['image'])){?>
+                                        <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($post['image']); ?>"
+                                            alt="user image" class="imageShow">
+                                        <?php } ?>
+                                    </p>
+                            </form>
+                            <?php $findlikeforUserID = findlikeforUserID($post['postID'],$currentUser['id']); 
+                                                  $Nolike = (count($findlikeforUserID) === 0);
+                                                  $findlikePost = findlikePost($post['postID']);
+                                        ?>
+                            <form method="POST">
+                                <p>
+                                    <?php if($Nolike): ?>
+                                    <button class="far fa-thumbs-up mr-1  " type="submit" name="like"
+                                        value="<?php echo $post['postID'] ?>"></button>(<?php echo count($findlikePost)?>)
+                                    <?php else: ?>
+                                    <button class="far fa-thumbs-up mr-1  btn-primary " type="submit" name="unlike"
+                                        value="<?php echo $post['postID'] ?>">
+                                    </button> (<?php echo count($findlikePost)?>)
+                                    <?php endif ;?>
+                                    <span class="float-right">
+                                        <a href="#" class="link-black text-sm">
+                                            <i class="far fa-comments mr-1"></i> Bình luận
+                                            (<?php $showComments = showComment($post['postID']); echo count($showComments);?>)
+                                        </a>
+                                    </span>
+                                </p>
+                            </form>
+                            <form method="POST" class="form-horizontal">
+                                <div class="input-group input-group-sm mb-0">
+                                    <textarea class="form-control form-control-sm" name="comment" cols="30" rows="2"
+                                        placeholder="Viết bình luận..."></textarea>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="submit" name="commentts"
+                                            value="<?php echo $post['postID'] ?>">Bình luận</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <?php  foreach($showComments as $showComment):  ?>
+                            <a class="nav-link" data-toggle="dropdown"><img
+                                    src="<?php echo 'data:image/jpeg;base64,' . base64_encode($showComment['profilePicture']); ?>"
+                                    class="img-circle" alt="Avatar" width="25" height="25">
+                                <?php echo $showComment['firstname'] .' '. $showComment['lastname']; ?></a>
+                            <?php echo $showComment['Content']; ?>
+                            <?php endforeach; ?>
+                        </div>
+
+                    </div>
+                    <!-- /.post -->
+                </div>
             </div>
+            <?php } }?>
+            <?php endforeach; ?>
+
+            <!-- /.tab-pane -->
+
             <!-- /.tab-content -->
         </div><!-- /.card-body -->
     </div>

@@ -4,15 +4,22 @@ require_once 'init.php';
 ?>
 <?php include 'header.php'; ?>
 <link rel="stylesheet" type="text/css" href="./css_files/style_page.css">
+<link rel="stylesheet" href="./css_files/style_image.css">
 <?php
 $success = true;
+if(isset($_FILES['UploadPicture'])){
+    $fileName = $_FILES['UploadPicture']['name'];
+    $filetmp  = $_FILES['UploadPicture']['tmp_name'];
+   $imagetmp = file_get_contents($filetmp);
+}
 if (isset($_POST['Posts'])) {
     $content = $_POST['content'];
     $lengh = strlen($content);
+    $privacy = $_POST['w_privacy'];
     if ($lengh == 0 || $lengh > 1024) {
         $success = false;
     } else {
-        createPost($currentUser['id'], $content);
+        createPost($currentUser['id'], $content,$privacy,$imagetmp);
         header('Location: index.php');
     }
 }
@@ -22,12 +29,20 @@ if(isset($_POST['commentts'])){
     createComments($post_ID,$currentUser['id'],$comments);
     header('Location: index.php');
 }
+if (isset($_POST['like'])) {
+    $postid = $_POST['like'];
+    Likes($postid,$currentUser['id']);
+ }
+ if(isset($_POST['unlike'])){
+    $postid = $_POST['unlike'];
+    Unlikes($postid,$currentUser['id']);
+ }
 //Xử lí phân trang
 // BƯỚC 2: TÌM TỔNG SỐ RECORDS
 $totalrecord =  totalpage();
 // BƯỚC 3: TÌM LIMIT VÀ CURRENT_PAGE
 $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
-$limit = 2;
+$limit = 10;
 // BƯỚC 4: TÍNH TOÁN TOTAL_PAGE VÀ START
 // tổng số trang
 $total_page = ceil($totalrecord / $limit);
@@ -67,8 +82,13 @@ if ($start < 0) {
                         <?php foreach ($friends as $friend) : ?>
                         <?php if($currentUser['id'] != $friend['id']) { ?>
                         <li>
+                            <?php if($friend['profilePicture'] == null): ?>
+                            <img src="./images/profile_default.jpg" class="img-circle" alt="Avatar" width="25"
+                                height="25">
+                            <?php else: ?>
                             <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($friend['profilePicture']); ?>"
                                 class="img-circle" alt="Avatar" width="25" height="25">
+                            <?php endif;?>
                             <a
                                 href="information.php?id=<?php echo $friend['id']; ?>"><?php echo $friend['firstname'].' '.$friend['lastname']; ?></a>
                         </li>
@@ -87,15 +107,27 @@ if ($start < 0) {
                         <div class="post">
                             <div class="panel panel-default">
                                 <div class="panel-body">
-                                    <form method="POST">
-                                        <div class="form-group">
-                                            <textarea class="form-control" id="content" name="content"
-                                                placeholder="Bạn đang nghĩ gì..."></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="btn btn-primary" type="submit" name="Posts" value="Đăng">
-                                        </div>
-                                    </form>
+                                <form method="POST" enctype="multipart/form-data">
+                                            <div class="input-group input-group-sm mb-0">
+                                                <textarea class="form-control" id="content" name="content"
+                                                    placeholder="Bạn đang nghĩ gì..."></textarea>
+                                                <div class="input-group-append">
+                                                    <input class="btn btn-primary" type="submit" name="Posts"
+                                                        value="Đăng">
+                                                </div>
+                                                <h6><select
+                                                    style="margin: 5px; padding: 0px 10px; max-width: 110px; height: 35px;"
+                                                    name="w_privacy">
+                                                    <option selected value="0">Public</option>
+                                                    <option value="1">Friends</option>
+                                                    <option value="2"></span> Only me</option>
+                                                </select></h6> 
+
+                                            </div>
+                                            <h5><input name="UploadPicture" id="UploadPicture" type="file"
+                                                accept="image/jpeg" onchange="readURL(this);" /></h5> 
+                                            <img id="blah" class="imgPreview" src="#" alt="" /> 
+                                        </form>
                                 </div>
                                 <ul class="pagination modal-1">
                                     <?php if ($current_page > 1 && $total_page > 1) {
@@ -129,6 +161,9 @@ if ($start < 0) {
                             <?php endif; ?>
                         </div>
                         <?php foreach ($posts as $post) : ?>
+                        <?php if($posts){
+                                if($post['privacy'] == 0 || $post['privacy'] == 1){
+                         ?>
                         <div class="active tab-pane" id="activity">
                             <div class="card">
                                 <div class="card-body">
@@ -157,27 +192,50 @@ if ($start < 0) {
                                                     <?php }?>
                                                 </span>
                                                 <span class="description">Đăng lúc:
-                                                    <?php echo $post['post_time']; ?></span>
+                                                    <?php echo  $post['post_time'];  ?>
+                                                    <?php if($post['privacy'] == 0):?>
+                                                    <a class="fas fa-globe-europe"></a>
+                                                    <?php elseif($post['privacy'] == 1):?>
+                                                    <a class="fas fa-user-friends"></a>
+                                                    <?php else: ?>
+                                                    <a class="fas fa-lock"></a>
+                                                    <?php endif;?>
+                                                </span>
                                             </div>
                                             <!-- /.user-block -->
                                             <p>
-                                                <?php echo $post['content']; ?>
+                                                <h5> <?php echo $post['content']; ?></h5>
+                                            </p>
+                                            <p>
+                                                <?php if(!empty($post['image'])){?>
+                                                <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($post['image']); ?>"
+                                                    alt="user image" class="imageShow">
+                                                <?php } ?>
                                             </p>
                                     </form>
-                                    <p>
-                                        <a href="#" class="link-black text-sm mr-2"><i
-                                                class="far fa-thumbs-up mr-1"></i>Thích</a>
-                                        <a href="#" class="link-black text-sm mr-2"><i class="far fa-thumbs-down"></i>
-                                            Không thích</a>
-                                        <a href="#" class="link-black text-sm"><i class="fas fa-share mr-1"></i>
-                                            Chia sẻ</a>
-                                        <span class="float-right">
-                                            <a href="#" class="link-black text-sm">
-                                                <i class="far fa-comments mr-1"></i> Bình luận
-                                                (<?php $showComments = showComment($post['postID']); echo count($showComments); ?>)
-                                            </a>
-                                        </span>
-                                    </p>
+                                    <?php $findlikeforUserID = findlikeforUserID($post['postID'],$currentUser['id']); 
+                                                  $Nolike = (count($findlikeforUserID) === 0);
+                                                  $findlikePost = findlikePost($post['postID']);
+                                        ?>
+                                    <form method="POST">
+                                       <h5> <p>
+                                       <?php if ($Nolike): ?>
+                                            <button class="far fa-thumbs-up mr-1  " type="submit" name="like"
+                                                value="<?php echo $post['postID'] ?>"></button>(<?php echo count($findlikePost)?>)
+                                            <?php else: ?>
+                                            <button class="far fa-thumbs-up mr-1  btn-primary " type="submit"
+                                                name="unlike" value="<?php echo $post['postID'] ?>">
+                                               </button> (<?php echo count($findlikePost)?>)
+                                            <?php endif ;?>
+                                            <span class="float-right">
+                                                <a href="#" class="link-black text-sm">
+                                                    <i class="far fa-comments mr-1"></i> Bình luận
+                                                    (<?php $showComments = showComment($post['postID']); echo count($showComments);?>)
+                                                </a>
+                                            </span>
+                                        </p>
+                                        </h5>
+                                    </form>
 
                                     <form method="POST" class="form-horizontal">
                                         <div class="input-group input-group-sm mb-0">
@@ -190,11 +248,13 @@ if ($start < 0) {
                                         </div>
                                     </form>
                                     <?php  foreach($showComments as $showComment):  ?>
-                                    <a class="nav-link" data-toggle="dropdown"><img
-                                            src="<?php echo 'data:image/jpeg;base64,' . base64_encode($showComment['profilePicture']); ?>"
-                                            class="img-circle" alt="Avatar" width="25" height="25">
-                                        <?php echo $showComment['firstname'] .' '. $showComment['lastname']; ?></a>
-                                    <h5><?php echo $showComment['Content']; ?></h5>
+                                    <div>
+                                        <a class="nav-link" data-toggle="dropdown"><img
+                                                src="<?php echo 'data:image/jpeg;base64,' . base64_encode($showComment['profilePicture']); ?>"
+                                                class="img-circle" alt="Avatar" width="25" height="25">
+                                            <b class="profile-username text-center"><?php echo $showComment['firstname'] .' '. $showComment['lastname']; ?></b><br>
+                                            &ensp;&emsp;<?php echo $showComment['Content']; ?></a>
+                                    </div>
                                     <?php endforeach; ?>
 
                                 </div>
@@ -202,6 +262,7 @@ if ($start < 0) {
                             <!-- /.post -->
                         </div>
                     </div>
+                    <?php }}?>
                     <?php endforeach; ?>
                     <!-- /.tab-pane -->
                 </div>

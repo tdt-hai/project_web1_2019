@@ -58,7 +58,7 @@ function createUser($f_name, $l_name, $email, $username, $passsword, $profilePic
         $stmt->execute(array($f_name, $l_name, $email, $username, $hashPass, 0, $activationCode, $profilePicture, $birthday, $phonenumber));
         $newAccount = $db->lastInsertId();
         // Send mail
-        die();
+        //die();
         sendMail(
                 $email,
                 $l_name,
@@ -149,7 +149,7 @@ function createPost($userID, $content,$privacy,$image)
 function showPost($id)
 {
         global $db;
-        $stmt = $db->prepare("SELECT us.postID, uc.profilePicture,uc.firstname,uc.lastname,us.post_time,us.content,us.privacy FROM `user_posts` us, user_accounts uc Where us.id= ?
+        $stmt = $db->prepare("SELECT us.postID, uc.profilePicture,uc.firstname,uc.lastname,us.post_time,us.content,us.privacy,us.image FROM `user_posts` us, user_accounts uc Where us.id= ?
                                 and us.id=uc.id order by `post_time` DESC");
         $stmt->execute(array($id));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -246,43 +246,11 @@ function findrelationship($userid1, $userid2)
         $stmt->execute(array($userid1, $userid2, $userid2, $userid1));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-//sendMail friend
-function sendMail_Friend($from,$fromName,$to, $toName, $subject, $content)
-{
-        global $EMAIL_FROM, $EMAIL_NAME, $EMAIL_PASSWORD;
-        // Instantiation and passing `true` enables exceptions
-        $mail = new PHPMailer(true);
-
-        //Server settings
-        $mail->isSMTP(); // Send using SMTP
-
-        $mail->CharSet    = 'UTF-8';
-        $mail->Host       = 'smtp.gmail.com'; // Set the SMTP server to send through
-        $mail->SMTPAuth   = true; // Enable SMTP authentication
-        $mail->Username   = $EMAIL_FROM; // SMTP username
-        $mail->Password   = $EMAIL_PASSWORD; // SMTP password
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
-        $mail->Port       = 587; // TCP port to connect to
-
-        //Recipients
-        $mail->setFrom($EMAIL_FROM, $EMAIL_NAME);
-        $mail->addAddress($to, $toName); // Add a recipient
-
-        // Content
-        $mail->isHTML(true); // Set email format to HTML
-        $mail->Subject = $subject;
-        $mail->Body    = $content;
-        //  $mail->AltBody = $content;
-
-        $mail->send();
-        return true;
-}
 function Send_Accept_FriendRequest($userid1, $userid2)
 {
         global $db;
         $stmt = $db->prepare("INSERT INTO friends(UserID_1,UserID_2) VALUES(?, ?)");
         $newAccount = $stmt->execute(array($userid1, $userid2));
-        // sendMail_Friend($email,$l_name,'Confirm email',"Your activation code is:<a href=\"$BASE_URL/confirmEmail.php?activationCode=$activationCode\">$BASE_URL/confirmEmail.php?activationCode=$activationCode</a>");
         return $newAccount;
 }
 function cancel_delete_FriendRequest($userid1, $userid2)
@@ -329,7 +297,7 @@ function getNewFeedsForUserId($userId,$start,$limit) {
           $friendIds[] = $friend['id'];
         }
         $friendIds[] = $userId;
-        $stmt = $db->prepare("SELECT p.postID, p.id, u.firstname ,u.lastname, u.profilePicture, p.content, p.post_time FROM user_posts as p LEFT JOIN user_accounts as u ON u.id = p.id WHERE p.id IN (" . implode(',', $friendIds) .  ") ORDER BY post_time DESC LIMIT ?,?");
+        $stmt = $db->prepare("SELECT p.postID, p.id, u.firstname ,u.lastname, u.profilePicture, p.content, p.post_time,p.privacy,p.image FROM user_posts as p LEFT JOIN user_accounts as u ON u.id = p.id WHERE p.id IN (" . implode(',', $friendIds) .  ") ORDER BY post_time DESC LIMIT ?,?");
         $stmt->bindParam(1, $start, PDO::PARAM_INT);
         $stmt->bindParam(2, $limit, PDO::PARAM_INT);
         $stmt->execute();
@@ -394,6 +362,17 @@ function showComment($idPost)
         $stmt->execute(array($idPost));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+function sendEmailAddFriend($email, $l_name,$from,$idfrom)
+{
+        global $BASE_URL;
+        sendMail(
+                $email,
+                $l_name,
+                'Friend request',
+                "$from sent you a friend request 
+                <a href=\"$BASE_URL/information.php?id=$idfrom\">$BASE_URL/information.php?id=$idfrom</a>"
+        );
+} 
 /////LIKE
 function Likes($postID, $userID)
 {
