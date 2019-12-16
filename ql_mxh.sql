@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 13, 2019 at 09:24 AM
+-- Generation Time: Dec 14, 2019 at 01:27 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
 
@@ -25,6 +25,71 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `comments`
+--
+
+DROP TABLE IF EXISTS `comments`;
+CREATE TABLE IF NOT EXISTS `comments` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PostID` int(11) NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `Content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `CreateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM AUTO_INCREMENT=94 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `comments`
+--
+
+INSERT INTO `comments` (`ID`, `PostID`, `UserID`, `Content`, `CreateTime`) VALUES
+(75, 199, 43, 'fsdf', '2019-12-14 10:33:41'),
+(76, 198, 43, '', '2019-12-14 10:59:57'),
+(77, 193, 43, '2', '2019-12-14 11:10:07'),
+(78, 199, 43, '', '2019-12-14 11:43:40'),
+(74, 198, 43, 'hahahahaha', '2019-12-14 10:31:23'),
+(73, 199, 43, '123', '2019-12-14 10:29:26'),
+(72, 199, 43, 'gfdgg', '2019-12-14 10:22:23'),
+(71, 199, 43, '', '2019-12-14 10:13:41'),
+(70, 199, 43, '', '2019-12-14 10:12:44'),
+(69, 199, 43, '', '2019-12-14 09:58:54'),
+(68, 199, 43, 'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy', '2019-12-14 05:14:16'),
+(67, 199, 43, 'dsad', '2019-12-14 05:08:46'),
+(66, 199, 43, 'vcxv', '2019-12-14 05:08:35'),
+(65, 199, 43, '111111111111111111111111111111111', '2019-12-14 05:07:23'),
+(61, 199, 43, 'fdf', '2019-12-14 05:00:45'),
+(60, 199, 43, '456456', '2019-12-14 04:56:42'),
+(59, 199, 43, '1', '2019-12-14 04:52:37'),
+(58, 199, 43, 'fffffgfdgfđgfdgfd', '2019-12-14 04:44:25'),
+(57, 199, 43, 'fsdf', '2019-12-14 04:37:36'),
+(56, 199, 43, 'chào allllllll', '2019-12-14 04:35:06'),
+(55, 195, 44, '123', '2019-12-14 04:20:01'),
+(54, 198, 43, 'gfgfdfdg', '2019-12-14 04:11:42'),
+(53, 198, 43, 'chào ', '2019-12-14 04:10:42'),
+(52, 198, 43, 'chào mít', '2019-12-14 04:09:22'),
+(51, 199, 43, '2', '2019-12-14 04:06:43'),
+(64, 199, 43, 'd', '2019-12-14 05:06:24'),
+(63, 199, 43, 'f', '2019-12-14 05:05:34'),
+(62, 199, 43, 'g', '2019-12-14 05:05:32'),
+(79, 199, 43, '22222222222222222', '2019-12-14 12:31:33'),
+(80, 200, 43, 'd', '2019-12-14 12:38:52'),
+(81, 200, 43, 'ddddddddddddddddd', '2019-12-14 13:08:24'),
+(82, 200, 43, 'f', '2019-12-14 13:13:04'),
+(83, 195, 43, 'dsad', '2019-12-14 13:14:05'),
+(84, 201, 43, 'haha', '2019-12-14 13:18:58'),
+(85, 201, 43, 'f', '2019-12-14 13:19:46'),
+(86, 195, 44, 'hhaha', '2019-12-14 13:20:28'),
+(87, 201, 44, 'Hoàng cmt', '2019-12-14 13:21:02'),
+(88, 201, 44, 'fdfs', '2019-12-14 13:22:52'),
+(89, 201, 43, 'g', '2019-12-14 13:24:41'),
+(90, 201, 43, 'd', '2019-12-14 13:25:40'),
+(91, 195, 43, 'f', '2019-12-14 13:25:49'),
+(92, 195, 43, 'f', '2019-12-14 13:26:14'),
+(93, 201, 43, 'vcxcvcxvcxv', '2019-12-14 13:26:19');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `friends`
 --
 
@@ -41,8 +106,6 @@ CREATE TABLE IF NOT EXISTS `friends` (
 --
 
 INSERT INTO `friends` (`UserID_1`, `UserID_2`, `CreateArt`) VALUES
-(48, 43, '2019-11-30 01:56:29'),
-(43, 48, '2019-11-30 01:55:46'),
 (43, 44, '2019-12-13 07:04:44'),
 (44, 43, '2019-12-13 07:04:55');
 
@@ -61,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `Type` int(11) NOT NULL,
   `CreateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=55 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `messages`
@@ -117,7 +180,11 @@ INSERT INTO `messages` (`ID`, `Content`, `UserID1`, `UserID2`, `Type`, `CreateTi
 (47, '123', 43, 48, 0, '2019-12-13 09:22:04'),
 (48, '123', 48, 43, 1, '2019-12-13 09:22:04'),
 (49, 'm bị sao', 48, 43, 0, '2019-12-13 09:22:43'),
-(50, 'm bị sao', 43, 48, 1, '2019-12-13 09:22:43');
+(50, 'm bị sao', 43, 48, 1, '2019-12-13 09:22:43'),
+(51, 'ko sao', 43, 48, 0, '2019-12-14 02:45:00'),
+(52, 'ko sao', 48, 43, 1, '2019-12-14 02:45:00'),
+(53, 'fdsf', 43, 44, 0, '2019-12-14 10:57:58'),
+(54, 'fdsf', 44, 43, 1, '2019-12-14 10:57:58');
 
 -- --------------------------------------------------------
 
@@ -169,17 +236,16 @@ CREATE TABLE IF NOT EXISTS `user_posts` (
   `post_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`postID`),
   KEY `id` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=198 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=202 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `user_posts`
 --
 
 INSERT INTO `user_posts` (`postID`, `id`, `content`, `post_time`) VALUES
-(193, 43, '1', '2019-11-30 07:27:29'),
 (192, 48, '4', '2019-11-29 12:04:43'),
 (195, 44, '3213213', '2019-11-30 07:28:58'),
-(197, 43, 'gjgjgjh', '2019-12-03 19:40:07');
+(201, 43, 'dsda', '2019-12-14 20:13:10');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

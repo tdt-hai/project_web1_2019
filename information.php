@@ -5,9 +5,9 @@ $posts = showPost($_GET['id']);
 ////////////////////////////
 $users = findUserByID($_GET['id']);
 //Nếu đăng nhập mới thấy file profile.php
-if (!$currentUser) {
-    header("Location:login.php");
-}
+    // if (!$currentUser) {
+    //     header("Location:login.php");
+    // }
 $relationship = findrelationship($currentUser['id'], $users['id']);
 $isFriend = (count($relationship) === 2);
 $norelationship = count($relationship) === 0;
@@ -18,6 +18,7 @@ if (count($relationship) === 1) {
 ?>
 <?php
 $success = true;
+//CreatePost
 if (isset($_POST['Posts'])) {
     $content = $_POST['content'];
     $lengh = strlen($content);
@@ -28,7 +29,13 @@ if (isset($_POST['Posts'])) {
         header('Location:information.php?id='.$currentUser['id']);
     }
 }
-$friends = getFriends($users['id']); 
+$friends = getFriends($users['id']);
+if(isset($_POST['commentts'])){
+    $comments = $_POST['comment'];
+    $post_ID = $_POST['commentts'];
+    createComments($post_ID,$currentUser['id'],$comments);
+    header('Location:information.php?id='.$users['id']);
+}
 ?>
 <?php include 'header.php'; ?>
 <!-- --------------------------------------- -->
@@ -36,11 +43,12 @@ $friends = getFriends($users['id']);
 <!-- Content Wrapper. Contains page content -->
 <div class="">
     <!-- Main content -->
-    <section class="content">
+    <!-- <section class="content"> -->
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-3"  >
-            
+
+                <div class="col-md-3">
+
                     <!-- Profile Image -->
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
@@ -99,34 +107,37 @@ $friends = getFriends($users['id']);
                             <strong><i class="fas fa-book mr-1"></i> Education</strong>
 
                             <p class="text-muted">
-                                Khoa học Tự nhiên
+                                <?php echo $users['education']; ?>   
                             </p>
 
                             <hr>
 
                             <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
 
-                            <p class="text-muted">Ho Chi Minh, VietNam</p>
+                            <p class="text-muted">
+                                <?php echo $users['location']; ?>
+                            </p>
 
                             <hr>
 
                             <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
 
                             <p class="text-muted">
-                                <span class="tag tag-danger">UI Design</span>
+                                <?php echo $users['skill']; ?>
+                                <!-- <span class="tag tag-danger">UI Design</span>
                                 <span class="tag tag-success">Coding</span>
                                 <span class="tag tag-info">Javascript</span>
                                 <span class="tag tag-warning">PHP</span>
-                                <span class="tag tag-primary">Node.js</span>
+                                <span class="tag tag-primary">Node.js</span> -->
                             </p>
 
                             <hr>
 
                             <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
 
-                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
-                                fermentum enim
-                                neque.</p>
+                            <p>
+                                <?php echo $users['notes']; ?>
+                            </p>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -141,8 +152,7 @@ $friends = getFriends($users['id']);
                                     <?php if($currentUser['id'] == $users['id'] ) { ?>
                                     <div class="panel panel-default">
                                         <div class="panel-body">
-                                            <form method="POST"
-                                                action="information.php?id=<?php echo $users['id']; ?> ">
+                                            <form method="POST" >
                                                 <div class="form-group">
                                                     <textarea class="form-control" id="content" name="content"
                                                         placeholder="Bạn đang nghĩ gì..."></textarea>
@@ -161,13 +171,13 @@ $friends = getFriends($users['id']);
                                     </div>
                                     <?php endif; ?>
                                 </div>
-                                <?php if($isFriend || ($users['id'] == $currentUser['id'])){?>
+                                <?php  if($isFriend || ($users['id'] == $currentUser['id'])){?>
                                 <?php foreach ($posts as $post) : ?>
                                 <div class="active tab-pane" id="activity">
                                     <div class="card">
                                         <div class="card-body">
                                             <!-- Post -->
-                                            <form method="POST">
+                                            <form method="POST" >
                                                 <div class="post">
                                                     <div class="user-block">
                                                         <img class="img-circle img-bordered-sm"
@@ -207,10 +217,12 @@ $friends = getFriends($users['id']);
                                                     <p>
                                                         <?php echo $post['content']; ?>
                                                     </p>
-
+                                            </form>
                                                     <p>
                                                         <a href="#" class="link-black text-sm mr-2"><i
                                                                 class="far fa-thumbs-up mr-1"></i>Thích</a>
+                                                        <a href="#" class="link-black text-sm mr-2"><i
+                                                                class="far fa-thumbs-down"></i> Không thích</a>
                                                         <a href="#" class="link-black text-sm"><i
                                                                 class="fas fa-share mr-1"></i> Chia sẻ</a>
                                                         <span class="float-right">
@@ -219,28 +231,36 @@ $friends = getFriends($users['id']);
                                                             </a>
                                                         </span>
                                                     </p>
-                                                    <?php if($currentUser['id'] == $users['id'] ) { ?>
-                                                    <form method="POST"
-                                                        action="information.php?id=<?php echo $users['id']; ?> "
-                                                        class="form-horizontal">
+                                                    <?php 
+                                                        $showComments = showComment($post['postID']);
+                                                    ?>
+                                                    <form method="POST" class="form-horizontal"> 
                                                         <div class="input-group input-group-sm mb-0">
-                                                            <input class="form-control form-control-sm" id="comment"
-                                                                name="comment" placeholder="Bình luận tại đây">
+                                                            <textarea class="form-control form-control-sm"
+                                                                name="comment" cols="30" rows="2"
+                                                                placeholder="Viết bình luận..." ></textarea>
                                                             <div class="input-group-append">
-                                                                <input class="btn btn-primary" type="submit"
-                                                                    name="Comments" value="Bình luận">
+                                                                <button class="btn btn-primary" type="submit" name="commentts" value="<?php echo $post['postID'] ?>">Bình luận</button>
                                                             </div>
                                                         </div>
-                                                    </form>
-                                                    <?php }?>
+                                                    </form> 
+                                                    <?php  foreach($showComments as $showComment):  ?>
+                                                    <a class="nav-link" data-toggle="dropdown"><img
+                                                            src="<?php echo 'data:image/jpeg;base64,' . base64_encode($showComment['profilePicture']); ?>"
+                                                            class="img-circle" alt="Avatar" width="25" height="25">
+                                                            <?php echo $showComment['firstname'] .' '. $showComment['lastname']; ?></a>
+                                                    <?php echo $showComment['Content']; ?>
+                                                    <?php endforeach; ?>
                                                 </div>
-                                            </form>
+                                            
                                         </div>
                                         <!-- /.post -->
                                     </div>
                                 </div>
                                 <?php endforeach; ?>
                                 <?php }?>
+                                <?php                                                   
+                                ?>
                                 <!-- /.tab-pane -->
                             </div>
                             <!-- /.tab-content -->
@@ -260,8 +280,10 @@ $friends = getFriends($users['id']);
                                             <?php foreach ($friends as $friend) : ?>
                                             <?php ?>
                                             <li>
-                                                <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($friend['profilePicture']); ?>" class="img-circle" alt="Avatar" width="25" height="25">
-                                                <a href="information.php?id=<?php echo $friend['id']; ?>"><?php echo $friend['firstname'].' '.$friend['lastname']; ?></a>  
+                                                <img src="<?php echo 'data:image/jpeg;base64,' . base64_encode($friend['profilePicture']); ?>"
+                                                    class="img-circle" alt="Avatar" width="25" height="25">
+                                                <a
+                                                    href="information.php?id=<?php echo $friend['id']; ?>"><?php echo $friend['firstname'].' '.$friend['lastname']; ?></a>
                                             </li>
                                             <?php endforeach; ?>
                                         </ul>
@@ -275,7 +297,7 @@ $friends = getFriends($users['id']);
             </div>
             <!-- /.row -->
         </div><!-- /.container-fluid -->
-    </section>
+    <!-- </section> -->
     <!-- /.content -->
 </div>
 <!-- -------------------------------------- -->
