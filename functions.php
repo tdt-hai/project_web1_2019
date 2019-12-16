@@ -58,7 +58,7 @@ function createUser($f_name, $l_name, $email, $username, $passsword, $profilePic
         $stmt->execute(array($f_name, $l_name, $email, $username, $hashPass, 0, $activationCode, $profilePicture, $birthday, $phonenumber));
         $newAccount = $db->lastInsertId();
         // Send mail
-        //die();
+       // die();
         sendMail(
                 $email,
                 $l_name,
@@ -96,6 +96,14 @@ function updateUserProfilePicture($id, $image)
         return $stmt->execute(array($image, $id));
 }
 
+//Upload image on timeline
+function uploadImageOnTimeline($image)
+{
+    global $db;
+    $command = "UPDATE `user_accounts` SET `profilePicture` = ? WHERE `id` = ?";
+    $stmt    = $db->prepare($command);
+    return $stmt->execute(array($image, $id));
+}
 // Resize image
 function resizeImage($filename, $max_width, $max_height)
 {
@@ -215,8 +223,15 @@ function addRecoverCode($activationCode, $email, $username, $l_name)
         $command = "UPDATE `user_accounts` SET `activationCode` = ? WHERE `email` = ? OR `username` = ?";
         $stmt    = $db->prepare($command);
         $stmt->execute(array($activationCode, $email, $username));
+
         // Send mail
-        sendMail( $email, $l_name,'Recover your account',"Click the link to change password:<a href=\"$BASE_URL/confirmEmail.php?activationCode=$activationCode\">$BASE_URL/confirmEmail.php?activationCode=$activationCode</a>");
+        sendMail(
+                $email,
+                $l_name,
+                'Recover your account',
+                "Click the link to change password:
+  <a href=\"$BASE_URL/confirmEmail.php?activationCode=$activationCode\">$BASE_URL/confirmEmail.php?activationCode=$activationCode</a>"
+        );
 }
 //Xóa status
 function DeleteContentbyID($id)
@@ -259,7 +274,6 @@ function cancel_delete_FriendRequest($userid1, $userid2)
         $stmt = $db->prepare("DELETE FROM friends WHERE ( UserID_1 = ? AND UserID_2 = ?) OR ( UserID_1 = ? AND UserID_2 = ?) ");
         $stmt->execute(array($userid1, $userid2, $userid2, $userid1));
 }
-//Hàm lấy tất cả bạn bè của userID
 function getFriends($userId)
 {
         global $db;
@@ -288,6 +302,7 @@ function getSuggestionFriend() {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 //hàm newfeed khi đã là friend
 function getNewFeedsForUserId($userId,$start,$limit) {
         global $db;
@@ -419,6 +434,4 @@ function updatePrivate($postID){
         $stmt     = $db->prepare($command);
         return $stmt->execute(array($postID));
 }
-
-
 

@@ -37,6 +37,7 @@ $conversations = getLatestConversations($currentUser['id']);
         <nav class="navbar navbar-expand navbar-primary navbar-dark">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
+
                 <?php if (!$currentUser) : ?>
                 <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'login' ? 'active' : ''; ?>">
                     <a href="login.php" class=" nav-link fas fa-sign-in-alt"> Đăng nhập</a>
