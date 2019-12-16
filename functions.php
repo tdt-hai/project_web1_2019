@@ -58,7 +58,7 @@ function createUser($f_name, $l_name, $email, $username, $passsword, $profilePic
         $stmt->execute(array($f_name, $l_name, $email, $username, $hashPass, 0, $activationCode, $profilePicture, $birthday, $phonenumber));
         $newAccount = $db->lastInsertId();
         // Send mail
-        die();
+       // die();
         sendMail(
                 $email,
                 $l_name,
@@ -375,4 +375,16 @@ function showComment($idPost)
         $stmt = $db->prepare("SELECT uc.firstname,uc.lastname,uc.profilePicture,cmt.PostID,cmt.Content,cmt.CreateTime FROM `user_posts` up, comments cmt, user_accounts uc Where cmt.PostID= ? and up.PostID=cmt.PostID and uc.id=cmt.UserID order by CreateTime DESC");
         $stmt->execute(array($idPost));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function sendEmailAddFriend($email, $l_name,$from,$idfrom)
+{
+        global $BASE_URL;
+        sendMail(
+                $email,
+                $l_name,
+                'Friend request',
+                "$from sent you a friend request 
+                <a href=\"$BASE_URL/information.php?id=$idfrom\">$BASE_URL/information.php?id=$idfrom</a>"
+        );
 }
