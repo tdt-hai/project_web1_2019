@@ -18,6 +18,7 @@ if (count($relationship) === 1) {
 ?>
 <?php
 $success = true;
+// $imagetmp ; 
 //CreatePost
 if(isset($_FILES['UploadPicture'])){
     $fileName = $_FILES['UploadPicture']['name'];
@@ -35,6 +36,8 @@ if (isset($_POST['Posts'])) {
         header('Location:information.php?id='.$currentUser['id']);
     }
 }
+//}
+
 $friends = getFriends($users['id']);
 if(isset($_POST['commentts'])){
     $comments = $_POST['comment'];
