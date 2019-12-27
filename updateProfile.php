@@ -85,13 +85,12 @@ if (!$currentUser) {
         ?>
 
         <div class="login-logo">
-            <a><b>Lotus</b></a>
+            <a><b>Đổi thông tin cá nhân.</b></a>
         </div>
         <!-- /.login-logo -->
         <div class="card">
             <div class="card-body login-card-body">
-                <p class="login-box-msg"> Bạn chỉ còn một bước nữa từ mật khẩu mới, khôi phục mật khẩu của bạn ngay bây
-                    giờ.</p>
+                
                 <form action="updateProfile.php" method="POST" enctype="multipart/form-data">
                     <div class="input-group mb-3">
                         <div class="custom-file">

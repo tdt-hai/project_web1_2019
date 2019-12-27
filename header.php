@@ -43,7 +43,7 @@ $conversations = getLatestConversations($currentUser['id']);
                     <a href="login.php" class=" nav-link fas fa-sign-in-alt"> Đăng nhập</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'register' ? 'active' : ''; ?>">
-                    <a href="register.php" class="nav-link fas fa-registered"> Đăng kí</a>
+                    <a href="register.php" class="nav-link fas fa-user-plus"> Đăng kí</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'contacts' ? 'active' : ''; ?>">
                     <a href="contacts.php" class="nav-link fas fa-registered"> Liên hệ</a>
@@ -153,7 +153,7 @@ $conversations = getLatestConversations($currentUser['id']);
                     <ul class=" dropdown-menu  dropdown-menu-right">
                         <li><a href="information.php?id=<?php echo $currentUser['id']; ?>"><i
                                     class="fas fa-user-tie"></i> <span>Trang cá nhân</span></a></li>
-                        <li><a href="changePassword.php"><i class="fas fa-exchange-alt"></i> <span>Đổi mật
+                        <li><a href="changePassword.php"><i class="fas fa-edit"></i> <span>Đổi mật
                                     khẩu</span></a></li>
                         <li><a href="updateProfile.php"><i class="fas fa-user-edit"></i> <span>Đổi thông tin cá
                                     nhân</span></a></li>

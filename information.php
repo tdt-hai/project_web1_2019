@@ -149,28 +149,20 @@ if (isset($_POST['like'])) {
                     <!-- /.card-header -->
                     <div class="card-body">
                         <strong><i class="fas fa-university"></i>Sinh viên</strong>
-
                         <p class="text-muted">
                             <?php echo $users['Education'] ?>
                         </p>
-
                         <hr>
 
                         <strong><i class="fas fa-map-marker-alt mr-1"></i>Sống tại</strong>
-
                         <p class="text-muted"><?php echo $users['Location']?></p>
-
                         <hr>
-
                         <strong><i class="fas fa-pencil-alt mr-1"></i>Kĩ năng</strong>
                         <p class="text-muted">
                             <span class="tag tag-danger"><?php echo $users['Skill']?></span>
                         </p>
-
                         <hr>
-
                         <strong><i class="far fa-file-alt mr-1"></i>Tiểu sử</strong>
-
                         <p class="text-muted"><?php echo $users['Notes'] ?></p>
                     </div>
                     <!-- /.card-body -->
