@@ -45,6 +45,9 @@ $conversations = getLatestConversations($currentUser['id']);
                 <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'register' ? 'active' : ''; ?>">
                     <a href="register.php" class="nav-link fas fa-registered"> Đăng kí</a>
                 </li>
+                <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'contacts' ? 'active' : ''; ?>">
+                    <a href="contacts.php" class="nav-link fas fa-registered"> Liên hệ</a>
+                </li>
                 <?php else : ?>
                 <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'index' ? 'active' : ''; ?>">
                     <a class="nav-link fa fa-home" href="index.php"> Trang chủ</a>
@@ -52,6 +55,9 @@ $conversations = getLatestConversations($currentUser['id']);
                 <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'information' ? 'active' : ''; ?>">
                     <a href="information.php?id=<?php echo $currentUser['id']; ?>" class=" nav-link fas fa-user"> Trang
                         cá nhân</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block <?php echo $page == 'contacts' ? 'active' : ''; ?>">
+                    <a href="contacts.php" class="nav-link fas fa-registered"> Liên hệ</a>
                 </li>
             </ul>
 
