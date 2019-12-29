@@ -21,16 +21,16 @@ if ($currentUser) {
                 ?>
                 <div class="alert alert-success alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        <h5><i class="icon fas fa-check"></i> Thành công!</h5>
-                        Mã xác thực đã được gửi về email của bạn.Vui lòng kiểm tra email
+                        <h5><i class="icon fas fa-check"></i> Mã xác thực đã được gửi về email của bạn.Vui lòng kiểm tra email</h5>
+                        
                 </div>
                 <?php
             } else {
                 ?>
                  <div class="alert alert-warning alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        <h5><i class="icon fas fa-exclamation-triangle"></i> Cảnh báo!</h5>
-                        Tài khoản không tồn tại
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Tài khoản không tồn tại</h5>
+                        
                 </div>
                 <?php
             }

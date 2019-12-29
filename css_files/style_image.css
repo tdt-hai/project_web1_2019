@@ -1,0 +1,32 @@
+.imgPreview{
+    border-radius: 8px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+ 
+    object-fit: cover;
+}
+.choose_file{
+            position:relative;
+            display:inline-block;    
+            border-radius:8px;
+            border:#ebebeb solid 1px;
+            width:75px; 
+            padding: 4px 6px 4px 8px;
+            font: normal 14px Myriad Pro, Verdana, Geneva, sans-serif;
+            color: #7f7f7f;
+            margin-top: 2px;
+            background:white
+        }
+        .choose_file input[type="file"]{
+            -webkit-appearance:none; 
+            position:absolute;
+            top:0; left:0;
+            opacity:0; 
+        }
+.imageShow{
+    border-radius: 8px;
+    object-fit: cover;
+    max-width: 450px;
+    max-height: 500px;  
+}

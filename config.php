@@ -4,7 +4,7 @@ $dbUrl = '';
 // Connect to Database in LOCALHOST
 $DB_HOST = 'localhost';
 $DB_USER = 'root';
-$DB_NAME = 'ql_data';
+$DB_NAME = 'ql_mxh';
 $DB_PASS = '';
 
 // In web server
@@ -14,9 +14,9 @@ $DB_PASS = '';
 // $DB_PASS = '123456778';
 
 // Email config
-$EMAIL_FROM = 'thanhhai30091999@gmail.com';
-$EMAIL_NAME = 'ThanhHai';
-$EMAIL_PASSWORD = 'Tdth13158';
+$EMAIL_FROM = 'ltweb1.2019@gmail.com';
+$EMAIL_NAME = 'HHN';
+$EMAIL_PASSWORD = 'ABCxyz123@';
 
 
 // Url config
