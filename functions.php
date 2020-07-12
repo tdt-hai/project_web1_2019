@@ -55,7 +55,7 @@ function createUser($f_name, $l_name, $email, $username, $passsword, $profilePic
         $hashPass       = password_hash($passsword, PASSWORD_DEFAULT);
         $activationCode = generateCode(16);
         $stmt           = $db->prepare($command);
-        $stmt->execute(array($f_name, $l_name, $email, $username, $hashPass, 0, $activationCode, $profilePicture, $birthday, $phonenumber, $education, $location, $skill, $notes));
+        $stmt->execute(array($f_name, $l_name, $email, $username, $hashPass, 0, $activationCode, $profilePicture, $birthday, $phonenumber));
         $newAccount = $db->lastInsertId();
         // Send mail
        // die();
