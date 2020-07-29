@@ -1,7 +1,8 @@
 # project_web1_2019(social networking)
-![Thumbnail](https://imgur.com/X4eDumx)
-- After logging in
-![Thumbnail](https://imgur.com/ETTZzgu)
+![Thumbnail](https://i.imgur.com/ETTZzgu.png)
+- After logging in </br>
+![Thumbnail](https://i.imgur.com/ETTZzgu.png)
+
 ## Demo
 - Link: [Demo](http://haimit1999.rf.gd/project/login.php)
 - Using account below to login: 
