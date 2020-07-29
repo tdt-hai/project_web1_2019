@@ -13,5 +13,8 @@
 - Clone project: 
     -  `git clone https://github.com/tdt-hai/project_web1_2019.git`
 - Run: 
-    - `npm install` 
-    - `npm start`
+    - `B1: Install wamp Server` 
+    - `B2: Clone project to the www directory`
+    - `B3: Then add the database to MySQL`
+    - `B4: Type in the browser to run`
+    - `B5: Enter your provided username and password`
