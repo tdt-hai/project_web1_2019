@@ -1,6 +1,6 @@
 # project_web1_2019(social networking)
-![Thumbnail](https://i.imgur.com/ETTZzgu.png)
-- After logging in </br>
+![Thumbnail](https://i.imgur.com/X4eDumx.png)
+-<h1> After logging in </h1></br>
 ![Thumbnail](https://i.imgur.com/ETTZzgu.png)
 
 ## Demo
